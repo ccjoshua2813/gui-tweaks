@@ -14,7 +14,7 @@ import net.minecraft.world.item.equipment.Equippable;
 
 /**
  * Equipo del jugador en dos perfiles:
- * 1 = muñequito junto al panel de estado (armadura al centro, manos a los lados);
+ * 1 = piezas de armadura flotando junto al panel de estado;
  * 2 = columnas a los lados de la barra de items.
  * Las piezas de armadura son siluetas del color del material que se apagan al desgastarse.
  */
@@ -31,10 +31,9 @@ public final class EquipmentPanel {
 	private static final String[] BOOTS = {
 		".##......##.", ".##......##.", ".##......##.", "####....####", "####....####", "####....####"};
 
-	private static final int PAD = 5;
 	private static final int GAP = 4;
 	private static final int MARGIN = 4;
-	private static final int EMPTY_COLOR = 0xFF2E3037;
+	private static final int EMPTY_COLOR = 0x802E3037;
 	private static final int WORN_COLOR = 0xFF3C3C40;
 
 	private static ItemStack chestIcon;
@@ -49,12 +48,10 @@ public final class EquipmentPanel {
 		if (cfg.equipmentMode == 1) top(g, mc, p, cfg); else sides(g, mc, p, cfg);
 	}
 
-	// ---------------------------------------------------------------- perfil 1: muñequito
+	// ---------------------------------------------------------------- perfil 1: piezas flotando
 	private static void top(GuiGraphicsExtractor g, Minecraft mc, LocalPlayer p, GuiTweaksConfig cfg) {
-		Font font = mc.font;
 		float s = cfg.scalePercent / 100f;
-		int dollW = 14;
-		int w = PAD + 16 + 3 + dollW + 3 + 16 + PAD;
+		int w = 14;                       // ancho de la pieza más ancha (élitros)
 		int h = StatusPanel.height();
 
 		boolean statusShown = StatusPanel.isVisible(mc);
@@ -69,19 +66,13 @@ public final class EquipmentPanel {
 		g.pose().pushMatrix();
 		g.pose().translate(px, MARGIN);
 		g.pose().scale(s, s);
-		Draw.card(g, 0, 0, w, h, cfg.accentColor(), cfg.opacityPercent);
 
-		int dollX = PAD + 16 + 3;
+		// Sin recuadro ni manos: solo las piezas de armadura apiladas, centradas en la altura del panel
 		int y = (h - 34) / 2;
-		y = piece(g, HELMET, p.getItemBySlot(EquipmentSlot.HEAD), dollX, y, 1, dollW) + 1;
-		y = piece(g, chestShape(p), p.getItemBySlot(EquipmentSlot.CHEST), dollX, y, 1, dollW) + 1;
-		y = piece(g, LEGS, p.getItemBySlot(EquipmentSlot.LEGS), dollX, y, 1, dollW) + 1;
-		piece(g, BOOTS, p.getItemBySlot(EquipmentSlot.FEET), dollX, y, 1, dollW);
-
-		// Mano izquierda a la izquierda y mano derecha a la derecha, a la altura del pecho
-		int itemY = (h - 34) / 2 + 11;
-		handItem(g, font, p.getOffhandItem(), PAD, itemY);
-		handItem(g, font, p.getMainHandItem(), dollX + dollW + 3, itemY);
+		y = piece(g, HELMET, p.getItemBySlot(EquipmentSlot.HEAD), 0, y, 1, w) + 1;
+		y = piece(g, chestShape(p), p.getItemBySlot(EquipmentSlot.CHEST), 0, y, 1, w) + 1;
+		y = piece(g, LEGS, p.getItemBySlot(EquipmentSlot.LEGS), 0, y, 1, w) + 1;
+		piece(g, BOOTS, p.getItemBySlot(EquipmentSlot.FEET), 0, y, 1, w);
 
 		g.pose().popMatrix();
 	}
@@ -136,14 +127,11 @@ public final class EquipmentPanel {
 	private static int piece(GuiGraphicsExtractor g, String[] shape, ItemStack stack, int areaX, int y, int sc, int areaW) {
 		int w = shape[0].length() * sc;
 		int x = areaX + (areaW - w) / 2;
-		int color = stack.isEmpty() ? EMPTY_COLOR : wornColor(stack);
-		if (!stack.isEmpty() || sc > 0) {
-			int outline = stack.isEmpty() ? 0x00000000 : 0xFF000000;
-			if ((outline >>> 24) != 0) {
-				for (int[] d : new int[][] {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) drawShape(g, shape, x + d[0], y + d[1], sc, outline, false);
-			}
-			drawShape(g, shape, x, y, sc, color, !stack.isEmpty());
-		}
+		boolean empty = stack.isEmpty();
+		int color = empty ? EMPTY_COLOR : wornColor(stack);
+		int outline = empty ? 0x66000000 : 0xFF000000;
+		for (int[] d : new int[][] {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) drawShape(g, shape, x + d[0], y + d[1], sc, outline, false);
+		drawShape(g, shape, x, y, sc, color, !empty);
 		return y + shape.length * sc;
 	}
 

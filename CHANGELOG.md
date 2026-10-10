@@ -2,6 +2,9 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.2.1
+- Perfil de equipo "Armadura (arriba)": ahora solo muestra las piezas de armadura flotando junto al panel de estado, sin recuadro y sin los items de las manos.
+
 ## 0.2.0
 - Panel de equipo con dos perfiles (se elige en Info y efectos → Equipo; apagado por defecto):
   - Muñequito junto al panel de estado: casco, pechera o élitros, pantalón y botas apilados, con el item de la mano izquierda a un lado y el de la derecha al otro.
