@@ -41,6 +41,8 @@ public class GuiTweaksConfig {
 
 	/** Botones de comandos rápidos que aparecen al abrir el chat. */
 	public boolean showQuickCommands = true;
+	/** Botón de configuración en la pantalla de pausa (Esc). */
+	public boolean showPauseButton = true;
 	/** Panel de comandos del chat: true = centrado en la pantalla, false = arriba. */
 	public boolean chatPanelCenter = true;
 	/** Aviso temporal con nombre, encantamientos y durabilidad al cambiar de item. */
@@ -106,7 +108,7 @@ public class GuiTweaksConfig {
 		showNumbers = o.showNumbers; headEffects = o.headEffects; accent = o.accent; scalePercent = o.scalePercent;
 		opacityPercent = o.opacityPercent; barWidth = o.barWidth; showInfoPanel = o.showInfoPanel;
 		showFps = o.showFps; showCoords = o.showCoords; showDirection = o.showDirection;
-		showQuickCommands = o.showQuickCommands; chatPanelCenter = o.chatPanelCenter; showItemPopup = o.showItemPopup;
+		showQuickCommands = o.showQuickCommands; showPauseButton = o.showPauseButton; chatPanelCenter = o.chatPanelCenter; showItemPopup = o.showItemPopup;
 		popupSeconds = o.popupSeconds; showEffectsPanel = o.showEffectsPanel; equipmentMode = o.equipmentMode; hotbarStyle = o.hotbarStyle;
 		showMobHealth = o.showMobHealth; mobDistance = o.mobDistance;
 		mobHostile = o.mobHostile; mobPassive = o.mobPassive; mobPlayers = o.mobPlayers;

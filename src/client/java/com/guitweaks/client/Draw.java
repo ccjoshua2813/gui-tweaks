@@ -55,4 +55,12 @@ public final class Draw {
 	public static void pill(GuiGraphicsExtractor g, int x, int y, int w, int h, int color) {
 		pill(g, x, y, w, h, color, color);
 	}
+
+	/** Fondo de un botón del mod: oscuro y translúcido, o relleno con el color de acento al pasar el ratón. */
+	public static void buttonBox(GuiGraphicsExtractor g, int x, int y, int w, int h, boolean hover, int accent, int opacityPercent) {
+		float op = Math.max(0, Math.min(100, opacityPercent)) / 100f;
+		rounded(g, x, y, w, h, hover ? withAlpha(accent, 255) : withAlpha(0x000000, Math.round(110 * op)));
+		rounded(g, x + 1, y + 1, w - 2, h - 2,
+			hover ? withAlpha(shade(accent, 0.35f), 255) : withAlpha(0x1C1F26, Math.round(255 * op)));
+	}
 }

@@ -2,6 +2,10 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.6.0
+- Botón "GUI Tweaks" en la esquina superior derecha de la pantalla de pausa (Esc) que abre la configuración sin depender de Mod Menu. Mismo estilo del mod, con un icono de controles deslizantes. Se puede quitar con la opción "Botón en la pausa" (pestaña Extras).
+- Los botones del chat y el de la pausa comparten ahora el mismo dibujo de caja (`Draw.buttonBox`), para que el estilo sea uniforme.
+
 ## 0.5.1
 - Barra de vida de mobs: la tarjeta ya no se queda tras dejar de apuntar al mob (antes 0,8 s de espera más 0,4 s de desvanecido; ahora 0,12 s más 0,22 s), para que no llene la pantalla al pasar la vista por varios mobs seguidos.
 

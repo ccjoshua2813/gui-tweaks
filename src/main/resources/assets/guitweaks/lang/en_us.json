@@ -62,5 +62,6 @@
 	"guitweaks.config.mob_distance": "Distance",
 	"guitweaks.config.mob_hostile": "Hostile mobs",
 	"guitweaks.config.mob_passive": "Non-hostile mobs",
-	"guitweaks.config.mob_players": "Players"
+	"guitweaks.config.mob_players": "Players",
+	"guitweaks.config.pause_button": "Pause menu button"
 }

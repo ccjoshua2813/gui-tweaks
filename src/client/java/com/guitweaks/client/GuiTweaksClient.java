@@ -12,6 +12,7 @@ public class GuiTweaksClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		GuiTweaksConfig.load();
 		ChatQuickCommands.register();
+		PauseConfigButton.register();
 
 		// Las barras vanilla se ocultan según la config en vivo (sin reiniciar).
 		for (Identifier id : new Identifier[] {

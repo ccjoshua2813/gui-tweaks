@@ -97,14 +97,11 @@ public final class ChatQuickCommands {
 	private static void draw(GuiGraphicsExtractor g, Font font, Cell c, GuiTweaksConfig cfg) {
 		Button b = c.button();
 		int accent = cfg.accentColor();
-		float op = Math.max(0, Math.min(100, cfg.opacityPercent)) / 100f;
 		boolean hover = b.isHoveredOrFocused();
 		int x = b.getX(), y = b.getY(), w = b.getWidth(), h = b.getHeight();
 
 		// Fondo y contorno; con opacidad 0 solo se ve el resalte al pasar el ratón
-		Draw.rounded(g, x, y, w, h, hover ? Draw.withAlpha(accent, 255) : Draw.withAlpha(0x000000, Math.round(110 * op)));
-		Draw.rounded(g, x + 1, y + 1, w - 2, h - 2,
-			hover ? Draw.withAlpha(Draw.shade(accent, 0.35f), 255) : Draw.withAlpha(0x1C1F26, Math.round(255 * op)));
+		Draw.buttonBox(g, x, y, w, h, hover, accent, cfg.opacityPercent);
 
 		// Texto centrado; si no cabe, se desliza de un extremo al otro con una pausa en cada uno
 		float tw = font.width(c.label()) * TEXT_SCALE;

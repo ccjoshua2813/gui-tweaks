@@ -84,6 +84,7 @@ public class GuiTweaksConfigScreen extends Screen {
 				items.add(toggle("quick", () -> onOff(c.showQuickCommands), () -> c.showQuickCommands = !c.showQuickCommands));
 				items.add(toggle("chat_position", () -> t(c.chatPanelCenter ? "chat_position.center" : "chat_position.top"), () -> c.chatPanelCenter = !c.chatPanelCenter));
 				items.add(Button.builder(t("edit_commands"), b -> minecraft.setScreenAndShow(new QuickCommandsScreen(this))).size(COL_W, 20).build());
+				items.add(toggle("pause_button", () -> onOff(c.showPauseButton), () -> c.showPauseButton = !c.showPauseButton));
 				items.add(toggle("item_popup", () -> onOff(c.showItemPopup), () -> c.showItemPopup = !c.showItemPopup));
 				items.add(slider("popup_seconds", 1, 6, 1, " s", () -> c.popupSeconds, v -> c.popupSeconds = v));
 			}
