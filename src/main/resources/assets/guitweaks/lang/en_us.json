@@ -22,7 +22,7 @@
 	"guitweaks.config.fps": "Show FPS",
 	"guitweaks.config.coords": "Show coordinates",
 	"guitweaks.config.direction": "Show direction",
-	"guitweaks.config.reset": "Reset to defaults",
+	"guitweaks.config.reset": "Reset all",
 	"guitweaks.config.done": "Done",
 	"guitweaks.config.on": "ON",
 	"guitweaks.config.off": "OFF",
@@ -75,5 +75,6 @@
 	"guitweaks.config.head3d_zoom": "3D head zoom",
 	"guitweaks.config.head3d_height": "3D head height",
 	"guitweaks.config.info_style.2": "Round compass",
-	"guitweaks.config.arrow_trail": "Arrow trail (experimental)"
+	"guitweaks.config.arrow_trail": "Arrow trail (experimental)",
+	"guitweaks.config.reset_tab": "Reset this tab"
 }

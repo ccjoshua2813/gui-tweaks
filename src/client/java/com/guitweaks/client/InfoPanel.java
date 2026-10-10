@@ -50,6 +50,7 @@ public final class InfoPanel {
 
 		float s = cfg.scalePercent / 100f * TEXT_SCALE;
 		int w = textW + PAD_X * 2;
+		s = Math.min(s, (g.guiWidth() - 8f) / w);
 		int h = 9 + PAD_Y * 2;
 
 		boolean statusShown = StatusPanel.isVisible(mc);

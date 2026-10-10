@@ -63,4 +63,9 @@ public final class Draw {
 		rounded(g, x + 1, y + 1, w - 2, h - 2,
 			hover ? withAlpha(shade(accent, 0.35f), 255) : withAlpha(0x1C1F26, Math.round(255 * op)));
 	}
+
+	/** Reduce la escala de un panel de ancho {@code w} si no cabe en una pantalla de {@code screenW} píxeles de GUI. */
+	public static float fit(float scale, float w, int screenW) {
+		return Math.min(scale, (screenW - 8f) / Math.max(1f, w));
+	}
 }

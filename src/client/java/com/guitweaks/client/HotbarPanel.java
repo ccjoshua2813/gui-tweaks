@@ -2,7 +2,10 @@ package com.guitweaks.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 
@@ -16,7 +19,38 @@ public final class HotbarPanel {
 	private static final int WIDTH = 182;
 	private static final int HEIGHT = 22;
 
+	private static final Identifier ATTACK_BG = Identifier.withDefaultNamespace("hud/hotbar_attack_indicator_background");
+	private static final Identifier ATTACK_PROGRESS = Identifier.withDefaultNamespace("hud/hotbar_attack_indicator_progress");
+
 	private HotbarPanel() {}
+
+	/** Dibuja un item con la animación de "salto" que el juego hace al recogerlo. */
+	private static void popItem(GuiGraphicsExtractor g, Minecraft mc, ItemStack stack, int ix, int iy, float partial) {
+		float pop = stack.getPopTime() - partial;
+		if (pop > 0f) {
+			float k = 1f + pop / 5f;
+			g.pose().pushMatrix();
+			g.pose().translate(ix + 8, iy + 12);
+			g.pose().scale(1f / k, (k + 1f) / 2f);
+			g.pose().translate(-(ix + 8), -(iy + 12));
+		}
+		g.item(stack, ix, iy);
+		if (pop > 0f) g.pose().popMatrix();
+		g.itemDecorations(mc.font, stack, ix, iy);
+	}
+
+	/** Indicador de ataque junto a la barra, si el jugador lo tiene configurado así en las opciones del juego. */
+	private static void attackIndicator(GuiGraphicsExtractor g, Minecraft mc, LocalPlayer p, int x0, int y0) {
+		if (mc.options.attackIndicator().get() != AttackIndicatorStatus.HOTBAR) return;
+		float f = p.getAttackStrengthScale(0f);
+		if (f >= 1f) return;
+		boolean right = p.getMainArm() == HumanoidArm.RIGHT;
+		int x = right ? x0 + WIDTH + 6 : x0 - 24;
+		int y = y0 + 2;
+		g.blitSprite(RenderPipelines.GUI_TEXTURED, ATTACK_BG, x, y, 18, 18);
+		int h = (int) (f * 19f);
+		g.blitSprite(RenderPipelines.GUI_TEXTURED, ATTACK_PROGRESS, 18, 18, 0, 18 - h, x, y + 18 - h, 18, h);
+	}
 
 	/** ¿Debe dibujarse esta barra en vez de la vanilla? */
 	public static boolean active(Minecraft mc) {
@@ -33,6 +67,7 @@ public final class HotbarPanel {
 		int x0 = g.guiWidth() / 2 - WIDTH / 2;
 		int y0 = g.guiHeight() - HEIGHT;
 		float op = Math.max(0, Math.min(100, cfg.opacityPercent)) / 100f;
+		float partial = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
 
 		Draw.card(g, x0, y0, WIDTH, HEIGHT, accent, cfg.opacityPercent);
 
@@ -43,11 +78,10 @@ public final class HotbarPanel {
 			if (op > 0) Draw.rounded(g, cx + 1, cy + 1, 18, 18, Draw.withAlpha(0x000000, Math.round(70 * op)));
 			if (i == selected) selection(g, cx, cy, accent);
 			ItemStack stack = p.getInventory().getItem(i);
-			if (!stack.isEmpty()) {
-				g.item(stack, cx + 2, cy + 2);
-				g.itemDecorations(mc.font, stack, cx + 2, cy + 2);
-			}
+			if (!stack.isEmpty()) popItem(g, mc, stack, cx + 2, cy + 2, partial);
 		}
+
+		attackIndicator(g, mc, p, x0, y0);
 
 		// Mano secundaria, al lado contrario de la mano principal
 		ItemStack off = p.getOffhandItem();
@@ -55,8 +89,7 @@ public final class HotbarPanel {
 			boolean left = p.getMainArm() == HumanoidArm.RIGHT;
 			int ox = left ? x0 - 29 : x0 + WIDTH + 7;
 			Draw.card(g, ox, y0, 22, HEIGHT, accent, cfg.opacityPercent);
-			g.item(off, ox + 3, y0 + 3);
-			g.itemDecorations(mc.font, off, ox + 3, y0 + 3);
+			popItem(g, mc, off, ox + 3, y0 + 3, partial);
 		}
 	}
 

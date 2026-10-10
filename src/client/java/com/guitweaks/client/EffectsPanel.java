@@ -67,6 +67,7 @@ public final class EffectsPanel {
 
 		float s = cfg.scalePercent / 100f;
 		int w = widest + PAD * 2;
+		s = Draw.fit(s, w, g.guiWidth());
 		int h = rows.size() * CHIP_H + (rows.size() - 1) * GAP + PAD * 2;
 
 		int px = cfg.isRight() ? Math.round(g.guiWidth() - MARGIN - w * s) : MARGIN;

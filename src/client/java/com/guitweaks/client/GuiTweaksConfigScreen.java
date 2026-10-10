@@ -106,11 +106,17 @@ public class GuiTweaksConfigScreen extends Screen {
 			addRenderableWidget(w);
 		}
 
-		addRenderableWidget(Button.builder(t("done"), b -> onClose()).bounds(left, height - 28, COL_W, 20).build());
+		int bw = 112, gap = 4;
+		int bx = width / 2 - (bw * 3 + gap * 2) / 2;
+		addRenderableWidget(Button.builder(t("done"), b -> onClose()).bounds(bx, height - 28, bw, 20).build());
+		addRenderableWidget(Button.builder(t("reset_tab"), b -> {
+			c.resetTab(currentTab);
+			rebuildWidgets();
+		}).bounds(bx + bw + gap, height - 28, bw, 20).build());
 		addRenderableWidget(Button.builder(t("reset"), b -> {
 			c.copyFrom(new GuiTweaksConfig());
 			rebuildWidgets();
-		}).bounds(right, height - 28, COL_W, 20).build());
+		}).bounds(bx + (bw + gap) * 2, height - 28, bw, 20).build());
 	}
 
 	private static Button toggle(String key, Supplier<Component> value, Runnable action) {

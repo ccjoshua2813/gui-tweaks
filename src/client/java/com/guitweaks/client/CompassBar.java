@@ -56,7 +56,7 @@ public final class CompassBar {
 
 		int w = BAR_W + PAD * 2;
 		int h = PAD + (markers ? MARKER_H : 0) + (strip ? STRIP_H + (info ? 3 : 0) : 0) + (info ? INFO_H : 0) + PAD;
-		float s = cfg.scalePercent / 100f;
+		float s = Draw.fit(cfg.scalePercent / 100f, w, g.guiWidth());
 		int px = Math.round(g.guiWidth() / 2f - w * s / 2f);
 		int py = TOP + cfg.compassOffsetY;
 
@@ -98,7 +98,7 @@ public final class CompassBar {
 		int dialSize = dial ? (DIAL_R + 6) * 2 : 0;
 		int w = Math.max(dialSize, infoW) + PAD * 2;
 		int h = PAD + (dial ? dialSize + (info ? 2 : 0) : 0) + (info ? INFO_H : 0) + PAD;
-		float s = cfg.scalePercent / 100f;
+		float s = Draw.fit(cfg.scalePercent / 100f, w, g.guiWidth());
 		int px = Math.round(g.guiWidth() / 2f - w * s / 2f);
 		int py = TOP + cfg.compassOffsetY;
 

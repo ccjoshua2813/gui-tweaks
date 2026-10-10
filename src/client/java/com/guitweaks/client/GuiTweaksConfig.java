@@ -136,6 +136,32 @@ public class GuiTweaksConfig {
 		for (QuickCommand q : o.quickCommands) quickCommands.add(new QuickCommand(q.label, q.command, q.send));
 	}
 
+	/** Devuelve a su valor de fábrica solo los ajustes de una pestaña de la configuración. */
+	public void resetTab(int tab) {
+		GuiTweaksConfig d = new GuiTweaksConfig();
+		switch (tab) {
+			case 0 -> {
+				side = d.side; showHead = d.showHead; head3d = d.head3d; head3dZoom = d.head3dZoom; head3dHeight = d.head3dHeight;
+				headEffects = d.headEffects; showNumbers = d.showNumbers; accent = d.accent; hideVanillaBars = d.hideVanillaBars;
+				scalePercent = d.scalePercent; opacityPercent = d.opacityPercent; barWidth = d.barWidth;
+			}
+			case 1 -> {
+				showInfoPanel = d.showInfoPanel; infoStyle = d.infoStyle; showFps = d.showFps; showCoords = d.showCoords;
+				showDirection = d.showDirection; compassPlayers = d.compassPlayers; compassHeads = d.compassHeads;
+				compassRange = d.compassRange; compassOffsetY = d.compassOffsetY; showEffectsPanel = d.showEffectsPanel;
+				hotbarStyle = d.hotbarStyle; equipmentMode = d.equipmentMode;
+			}
+			case 2 -> {
+				showQuickCommands = d.showQuickCommands; chatPanelCenter = d.chatPanelCenter; quickCommands = d.quickCommands;
+				arrowTrail = d.arrowTrail; showPauseButton = d.showPauseButton; showItemPopup = d.showItemPopup; popupSeconds = d.popupSeconds;
+			}
+			default -> {
+				showMobHealth = d.showMobHealth; mobDistance = d.mobDistance; mobHostile = d.mobHostile;
+				mobPassive = d.mobPassive; mobPlayers = d.mobPlayers;
+			}
+		}
+	}
+
 	public static void load() {
 		try {
 			if (Files.exists(FILE)) {

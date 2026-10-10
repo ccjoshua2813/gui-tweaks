@@ -2,6 +2,15 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.10.0 (candidata a 1.0)
+- Barra de salto de la montura (caballo, mula…) con el estilo del mod: al ocultar las barras vanilla se perdía; ahora se dibuja sobre la barra de items, con aviso de recarga.
+- Barra de aire bajo el agua en el estilo del mod (icono y píldora que se vacía, con aviso rojo al quedar poco).
+- Barra de items del mod: animación de "salto" al recoger items e indicador de ataque cuando el juego lo tiene en la barra (la columna de equipo se aparta para no taparlo).
+- Los paneles reducen su escala por sí solos si no caben en pantallas o escalas de GUI pequeñas.
+- Configuración: botón "Restablecer pestaña" además de "Restablecer todo".
+- `fabric.mod.json`: Fabric API 0.161.0 o superior como mínimo.
+- Licencia MIT en el archivo `LICENSE` (antes quedaba el CC0 de la plantilla) y README con descripción, requisitos y nota de transparencia sobre el uso de IA.
+
 ## 0.9.1
 - Estela de flecha: ahora colisiona con mobs y jugadores, como la flecha del juego, en vez de atravesarlos; el objetivo al que daría se marca con un borde muy fino del color de acento.
 - Punto de impacto mucho más visible incluso lejos: aro que crece con la distancia, punto, mástil y trazo más grueso, con puntos cada 4 ticks para apreciar la caída desde primera persona (donde la curva se ve como una línea vertical).

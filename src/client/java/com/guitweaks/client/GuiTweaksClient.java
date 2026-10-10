@@ -18,7 +18,7 @@ public class GuiTweaksClient implements ClientModInitializer {
 		// Las barras vanilla se ocultan según la config en vivo (sin reiniciar).
 		for (Identifier id : new Identifier[] {
 			VanillaHudElements.HEALTH_BAR, VanillaHudElements.FOOD_BAR, VanillaHudElements.ARMOR_BAR,
-			VanillaHudElements.INFO_BAR, VanillaHudElements.EXPERIENCE_LEVEL
+			VanillaHudElements.INFO_BAR, VanillaHudElements.EXPERIENCE_LEVEL, VanillaHudElements.AIR_BAR
 		}) {
 			HudElementRegistry.replaceElement(id, original -> (graphics, tickCounter) -> {
 				if (!GuiTweaksConfig.get().hideVanillaBars) original.extractRenderState(graphics, tickCounter);
@@ -34,6 +34,12 @@ public class GuiTweaksClient implements ClientModInitializer {
 		HudElementRegistry.attachElementAfter(VanillaHudElements.MISC_OVERLAYS,
 			Identifier.fromNamespaceAndPath(MOD_ID, "effects_panel"),
 			(graphics, tickCounter) -> EffectsPanel.render(graphics));
+		HudElementRegistry.attachElementAfter(VanillaHudElements.MISC_OVERLAYS,
+			Identifier.fromNamespaceAndPath(MOD_ID, "jump_bar"),
+			(graphics, tickCounter) -> ExtraBars.renderJump(graphics));
+		HudElementRegistry.attachElementAfter(VanillaHudElements.MISC_OVERLAYS,
+			Identifier.fromNamespaceAndPath(MOD_ID, "air_bar"),
+			(graphics, tickCounter) -> ExtraBars.renderAir(graphics));
 		HudElementRegistry.attachElementAfter(VanillaHudElements.MISC_OVERLAYS,
 			Identifier.fromNamespaceAndPath(MOD_ID, "equipment_panel"),
 			(graphics, tickCounter) -> EquipmentPanel.render(graphics));

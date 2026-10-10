@@ -87,7 +87,7 @@ public final class EquipmentPanel {
 		if (arrows > 0) counter(g, font, new ItemStack(Items.ARROW), String.valueOf(arrows), 0xFFFFFFFF, lx, ly + ROW * 2 + 1);
 
 		// Derecha: mano derecha, pantalón, botas y espacios libres
-		int rx = hotbarRight + 8;
+		int rx = hotbarRight + 8 + (mc.options.attackIndicator().get() == net.minecraft.client.AttackIndicatorStatus.HOTBAR ? 24 : 0);
 		int ry = g.guiHeight() - 3 - 4 * ROW;
 		if (cfg.opacityPercent > 0) Draw.rounded(g, rx - 2, ry, ICON + 4, 4 * ROW, tint);
 		ItemStack hand = p.getMainHandItem();

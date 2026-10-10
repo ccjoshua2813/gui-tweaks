@@ -70,7 +70,7 @@ public final class MobHealthPanel {
 		int w = Math.round(Math.max(nameW, BAR_W + 4 + hpW)) + PAD * 2;
 		int h = PAD + 8 + 3 + BAR_H + PAD;
 
-		float s = cfg.scalePercent / 100f;
+		float s = Draw.fit(cfg.scalePercent / 100f, w, g.guiWidth());
 		int px = Math.round(g.guiWidth() / 2f - w * s / 2f);
 		int py = Math.round(g.guiHeight() / 2f + 16);
 

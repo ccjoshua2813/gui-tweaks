@@ -68,7 +68,7 @@ public final class StatusPanel {
 		int w = width(cfg);
 		int h = height();
 
-		float s = cfg.scalePercent / 100f;
+		float s = Draw.fit(cfg.scalePercent / 100f, w, g.guiWidth());
 		int px = cfg.isRight() ? Math.round(g.guiWidth() - MARGIN - w * s) : MARGIN;
 
 		g.pose().pushMatrix();
