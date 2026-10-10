@@ -2,6 +2,9 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.10.1
+- Corrección: la 0.10.0 exigía Fabric API 0.161.0 o superior (la versión contra la que se compila) y no cargaba con la 0.160.0. El mínimo vuelve a ser 0.160.0, la versión con la que se ha probado el mod.
+
 ## 0.10.0 (candidata a 1.0)
 - Barra de salto de la montura (caballo, mula…) con el estilo del mod: al ocultar las barras vanilla se perdía; ahora se dibuja sobre la barra de items, con aviso de recarga.
 - Barra de aire bajo el agua en el estilo del mod (icono y píldora que se vacía, con aviso rojo al quedar poco).
