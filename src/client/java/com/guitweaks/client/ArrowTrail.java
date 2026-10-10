@@ -4,12 +4,17 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.gizmos.GizmoStyle;
 import net.minecraft.gizmos.Gizmos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ChargedProjectiles;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -48,6 +53,7 @@ public final class ArrowTrail {
 		int color = cfg.accentColor();
 		Vec3 prev = pos;
 		Vec3 end = null;
+		Entity hitEntity = null;
 		try (var ignored = ctx.levelRenderer().collectPerFrameRenderThreadGizmos()) {
 			for (int t = 0; t < MAX_TICKS; t++) {
 				Vec3 next = pos.add(vel);
@@ -55,14 +61,25 @@ public final class ArrowTrail {
 				boolean hitBlock = hit.getType() != HitResult.Type.MISS;
 				Vec3 stop = hitBlock ? hit.getLocation() : next;
 
+				// Colisión con mobs y jugadores, como la flecha del juego (el tirador no cuenta al principio)
+				final int tick = t;
+				AABB box = new AABB(pos, stop).inflate(1.0);
+				EntityHitResult eHit = ProjectileUtil.getEntityHitResult(p, pos, stop, box,
+					e -> !e.isSpectator() && e.isPickable() && (e != p || tick > 5), stop.distanceToSqr(pos) + 1.0);
+				boolean hitMob = eHit != null;
+				if (hitMob) stop = eHit.getLocation();
+
 				// Estela: más opaca cerca de ti y más tenue lejos
-				float fade = 1f - 0.75f * (float) t / MAX_TICKS;
-				int a = Math.round(255 * Mth.clamp(fade, 0.25f, 1f));
-				if (t > 0 || stop.distanceToSqr(prev) > 0.0001) Gizmos.line(prev, stop, (a << 24) | (color & 0xFFFFFF), 2.5f);
+				float fade = 1f - 0.7f * (float) t / MAX_TICKS;
+				int a = Math.round(255 * Mth.clamp(fade, 0.3f, 1f));
+				Gizmos.line(prev, stop, (a << 24) | (color & 0xFFFFFF), 3f);
+				// Un punto cada 4 ticks: ayuda a ver la profundidad y la caída desde primera persona
+				if (t % 4 == 0 && t > 0) Gizmos.point(stop, (a << 24) | (color & 0xFFFFFF), 5f);
 				prev = stop;
 
-				if (hitBlock) {
+				if (hitMob || hitBlock) {
 					end = stop;
+					hitEntity = hitMob ? eHit.getEntity() : null;
 					break;
 				}
 				boolean inWater = !mc.level.getFluidState(net.minecraft.core.BlockPos.containing(next)).isEmpty();
@@ -70,10 +87,18 @@ public final class ArrowTrail {
 				pos = next;
 				if (pos.y < mc.level.getMinY() - 16) break;
 			}
-			// Marca del punto de impacto
+
+			// Punto de impacto bien visible, incluso lejos: aro, punto y un mástil que se ve por encima del terreno
 			if (end != null) {
-				Gizmos.point(end, 0xFFFFFFFF, 9f);
-				Gizmos.point(end, (0xFF << 24) | (color & 0xFFFFFF), 6f);
+				int mark = 0xFF000000 | (color & 0xFFFFFF);
+				double dist = end.distanceTo(p.getEyePosition(partial));
+				float size = (float) Mth.clamp(0.25 + dist * 0.012, 0.25, 1.5);
+				Gizmos.circle(end, size, GizmoStyle.stroke(mark, 3f)).setAlwaysOnTop();
+				Gizmos.point(end, 0xFFFFFFFF, 11f).setAlwaysOnTop();
+				Gizmos.point(end, mark, 7f).setAlwaysOnTop();
+				Gizmos.line(end, end.add(0, 1.5 + dist * 0.02, 0), mark, 2f).setAlwaysOnTop();
+				// El objetivo se marca con un borde muy fino del color de acento (sin verse a través de paredes)
+				if (hitEntity != null) Gizmos.cuboid(hitEntity.getBoundingBox(), GizmoStyle.stroke(mark, 1f));
 			}
 		}
 	}

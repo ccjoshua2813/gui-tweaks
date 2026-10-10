@@ -2,6 +2,10 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.9.1
+- Estela de flecha: ahora colisiona con mobs y jugadores, como la flecha del juego, en vez de atravesarlos; el objetivo al que daría se marca con un borde muy fino del color de acento.
+- Punto de impacto mucho más visible incluso lejos: aro que crece con la distancia, punto, mástil y trazo más grueso, con puntos cada 4 ticks para apreciar la caída desde primera persona (donde la curva se ve como una línea vertical).
+
 ## 0.9.0
 - (Experimental) Estela de flecha (Extras → "Estela de flecha"), desactivada por defecto: al tensar un arco, o con una ballesta cargada, se dibuja en el mundo la trayectoria que seguiría la flecha, con el color de acento y desvaneciéndose con la distancia, y una marca en el punto donde chocaría con un bloque. Simula la física de la flecha del juego (gravedad, rozamiento, agua, tu propio movimiento) y se apoya en el sistema de "gizmos" del juego. Algunos servidores consideran estas ayudas de puntería como trampa: usar con cuidado.
 
