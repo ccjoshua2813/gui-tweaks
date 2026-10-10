@@ -2,6 +2,11 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.5.0
+- Barra de vida de mobs: al apuntar a un mob dentro de la distancia configurada (4 a 64 bloques), aparece bajo la cruz una tarjeta pequeña con su nombre, una barra en píldora (verde a rojo según la vida) y el valor. No se ve a través de bloques, se mantiene un instante al dejar de apuntar y se desvanece. La vida mostrada se acerca suavemente a la real.
+- Nueva pestaña "Mobs" en la configuración: activar, distancia y filtros de hostiles, no hostiles y jugadores (estos últimos desactivados por defecto).
+- Botones del chat más compactos: los nombres largos ya no ensanchan la caja; el texto se desliza de un extremo al otro con una pausa en cada uno.
+
 ## 0.4.1
 - Panel de comandos del chat rediseñado: caja con el estilo del mod (opacidad y color de acento), botones pequeños en cuadrícula de 3 o 4 por fila (hasta 4 en una fila; 5-6 comandos en filas de 3), texto reducido si no cabe y resalte con el color de acento al pasar el ratón. Con opacidad 0 solo se ve el resalte.
 - Nueva opción "Panel del chat": Centro (por defecto) o Arriba.

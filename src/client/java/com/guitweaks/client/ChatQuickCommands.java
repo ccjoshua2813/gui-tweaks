@@ -24,7 +24,7 @@ public final class ChatQuickCommands {
 	private static final int GAP = 3;
 	private static final int TOP = 4;
 	private static final int MIN_W = 38;
-	private static final int MAX_W = 84;
+	private static final int MAX_W = 58;   // más compacto: los nombres largos se deslizan
 	private static final float TEXT_SCALE = 0.8f;
 
 	private ChatQuickCommands() {}
@@ -106,14 +106,32 @@ public final class ChatQuickCommands {
 		Draw.rounded(g, x + 1, y + 1, w - 2, h - 2,
 			hover ? Draw.withAlpha(Draw.shade(accent, 0.35f), 255) : Draw.withAlpha(0x1C1F26, Math.round(255 * op)));
 
-		// Texto centrado y reducido si no cabe
-		float scale = Math.min(TEXT_SCALE, (w - 6) / (float) Math.max(1, font.width(c.label())));
-		float tw = font.width(c.label()) * scale;
+		// Texto centrado; si no cabe, se desliza de un extremo al otro con una pausa en cada uno
+		float tw = font.width(c.label()) * TEXT_SCALE;
+		float avail = w - 8;
+		float offset = 0f, textX = x + (w - tw) / 2f;
+		if (tw > avail) {
+			textX = x + 4;
+			offset = marquee(tw - avail);
+		}
+		g.enableScissor(x + 4, y, x + w - 4, y + h);
 		g.pose().pushMatrix();
-		g.pose().translate(x + (w - tw) / 2f, y + (h - 9 * scale) / 2f + 0.5f);
-		g.pose().scale(scale, scale);
+		g.pose().translate(textX - offset, y + (h - 9 * TEXT_SCALE) / 2f + 0.5f);
+		g.pose().scale(TEXT_SCALE, TEXT_SCALE);
 		g.text(font, c.label(), 0, 0, hover ? 0xFFFFFFFF : 0xFFE6E6E6, true);
 		g.pose().popMatrix();
+		g.disableScissor();
+	}
+
+	/** Desplazamiento (0 a {@code range} píxeles) que va y vuelve, con una pausa en cada extremo. */
+	private static float marquee(float range) {
+		double speed = 18.0, pause = 0.8;                       // píxeles por segundo, segundos
+		double travel = range / speed, cycle = 2 * (travel + pause);
+		double t = (System.currentTimeMillis() / 1000.0) % cycle;
+		if (t < pause) return 0f;
+		if (t < pause + travel) return (float) ((t - pause) * speed);
+		if (t < 2 * pause + travel) return range;
+		return (float) (range - (t - 2 * pause - travel) * speed);
 	}
 
 	private static String labelOf(GuiTweaksConfig.QuickCommand q) {

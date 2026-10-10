@@ -56,5 +56,11 @@
 	"guitweaks.config.hotbar.1": "Estilo del mod",
 	"guitweaks.config.chat_position": "Panel del chat",
 	"guitweaks.config.chat_position.center": "Centro",
-	"guitweaks.config.chat_position.top": "Arriba"
+	"guitweaks.config.chat_position.top": "Arriba",
+	"guitweaks.config.tab.3": "Mobs",
+	"guitweaks.config.mob_health": "Vida de mobs",
+	"guitweaks.config.mob_distance": "Distancia",
+	"guitweaks.config.mob_hostile": "Hostiles",
+	"guitweaks.config.mob_passive": "No hostiles",
+	"guitweaks.config.mob_players": "Jugadores"
 }

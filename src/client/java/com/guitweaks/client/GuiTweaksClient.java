@@ -36,6 +36,9 @@ public class GuiTweaksClient implements ClientModInitializer {
 			Identifier.fromNamespaceAndPath(MOD_ID, "equipment_panel"),
 			(graphics, tickCounter) -> EquipmentPanel.render(graphics));
 		HudElementRegistry.attachElementAfter(VanillaHudElements.MISC_OVERLAYS,
+			Identifier.fromNamespaceAndPath(MOD_ID, "mob_health"),
+			(graphics, tickCounter) -> MobHealthPanel.render(graphics));
+		HudElementRegistry.attachElementAfter(VanillaHudElements.MISC_OVERLAYS,
 			Identifier.fromNamespaceAndPath(MOD_ID, "item_popup"),
 			(graphics, tickCounter) -> ItemPopup.render(graphics));
 

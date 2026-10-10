@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 public class GuiTweaksConfigScreen extends Screen {
 	private static final int COL_W = 150;
 	private static final int ROW = 22;
-	private static final int TABS = 3;
+	private static final int TABS = 4;
 	private static int currentTab = 0;
 
 	private final Screen parent;
@@ -40,7 +40,7 @@ public class GuiTweaksConfigScreen extends Screen {
 		GuiTweaksConfig c = GuiTweaksConfig.get();
 
 		// Pestañas
-		int tabW = 100;
+		int tabW = 88;
 		for (int i = 0; i < TABS; i++) {
 			final int tab = i;
 			Button b = Button.builder(t("tab." + i), x -> { currentTab = tab; rebuildWidgets(); })
@@ -72,6 +72,13 @@ public class GuiTweaksConfigScreen extends Screen {
 				items.add(toggle("effects", () -> onOff(c.showEffectsPanel), () -> c.showEffectsPanel = !c.showEffectsPanel));
 				items.add(toggle("hotbar", () -> t("hotbar." + c.hotbarStyle), () -> c.hotbarStyle = (c.hotbarStyle + 1) % 2));
 				items.add(toggle("equipment", () -> t("equipment." + c.equipmentMode), () -> c.equipmentMode = (c.equipmentMode + 1) % 3));
+			}
+			case 3 -> {
+				items.add(toggle("mob_health", () -> onOff(c.showMobHealth), () -> c.showMobHealth = !c.showMobHealth));
+				items.add(slider("mob_distance", 4, 64, 2, " m", () -> c.mobDistance, v -> c.mobDistance = v));
+				items.add(toggle("mob_hostile", () -> onOff(c.mobHostile), () -> c.mobHostile = !c.mobHostile));
+				items.add(toggle("mob_passive", () -> onOff(c.mobPassive), () -> c.mobPassive = !c.mobPassive));
+				items.add(toggle("mob_players", () -> onOff(c.mobPlayers), () -> c.mobPlayers = !c.mobPlayers));
 			}
 			default -> {
 				items.add(toggle("quick", () -> onOff(c.showQuickCommands), () -> c.showQuickCommands = !c.showQuickCommands));
