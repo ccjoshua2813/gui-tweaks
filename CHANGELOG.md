@@ -2,6 +2,10 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.10.4
+- Vida de la montura (los iconos que el juego pone a la derecha sobre la barra de items): ahora va centrada sobre la barra de salto, un 25 % más pequeña, y usa los mismos iconos del juego (siguen el texture pack). Se oculta la vanilla junto a las demás barras.
+- Barra de salto más larga (120 px) con el mismo grosor.
+
 ## 0.10.3
 - Barra de salto de la montura mucho más corta y fina (60x3 px), pegada a la barra de items. La barra de aire vuelve a su tamaño anterior (90x6 px, la 0.10.2 la había achicado de más).
 
