@@ -46,5 +46,9 @@
 	"guitweaks.config.tab.2": "Extras",
 	"guitweaks.config.effects": "Potion effects panel",
 	"guitweaks.config.item_popup": "Item popup",
-	"guitweaks.config.popup_seconds": "Popup time"
+	"guitweaks.config.popup_seconds": "Popup time",
+	"guitweaks.config.equipment": "Equipment",
+	"guitweaks.config.equipment.0": "Off",
+	"guitweaks.config.equipment.1": "Doll (top)",
+	"guitweaks.config.equipment.2": "Beside hotbar"
 }

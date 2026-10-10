@@ -70,6 +70,7 @@ public class GuiTweaksConfigScreen extends Screen {
 				items.add(toggle("coords", () -> onOff(c.showCoords), () -> c.showCoords = !c.showCoords));
 				items.add(toggle("direction", () -> onOff(c.showDirection), () -> c.showDirection = !c.showDirection));
 				items.add(toggle("effects", () -> onOff(c.showEffectsPanel), () -> c.showEffectsPanel = !c.showEffectsPanel));
+				items.add(toggle("equipment", () -> t("equipment." + c.equipmentMode), () -> c.equipmentMode = (c.equipmentMode + 1) % 3));
 			}
 			default -> {
 				items.add(toggle("quick", () -> onOff(c.showQuickCommands), () -> c.showQuickCommands = !c.showQuickCommands));

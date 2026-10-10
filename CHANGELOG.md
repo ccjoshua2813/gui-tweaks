@@ -2,6 +2,12 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.2.0
+- Panel de equipo con dos perfiles (se elige en Info y efectos → Equipo; apagado por defecto):
+  - Muñequito junto al panel de estado: casco, pechera o élitros, pantalón y botas apilados, con el item de la mano izquierda a un lado y el de la derecha al otro.
+  - Columnas a los lados de la barra de items: izquierda (mano izquierda, casco, pechera o élitros, flechas), derecha (mano derecha, pantalón, botas, espacios libres del inventario).
+- Las piezas de armadura son siluetas del color del material vanilla (cuero teñido, cota, hierro, oro, diamante, netherita, tortuga, cobre) que se apagan hacia gris al desgastarse.
+
 ## 0.1.0
 Primera versión guardada (Minecraft 26.2, Fabric, solo cliente).
 
