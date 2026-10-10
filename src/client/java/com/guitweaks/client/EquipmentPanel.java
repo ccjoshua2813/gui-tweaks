@@ -4,37 +4,33 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.DyedItemColor;
-import net.minecraft.world.item.equipment.Equippable;
 
 /**
- * Equipo del jugador en dos perfiles:
- * 1 = piezas de armadura flotando junto al panel de estado;
- * 2 = columnas a los lados de la barra de items.
- * Las piezas de armadura son siluetas del color del material que se apagan al desgastarse.
+ * Equipo del jugador con los iconos nativos de los items, en dos perfiles:
+ * 1 = armadura apilada junto al panel de estado (iconos reducidos);
+ * 2 = columnas junto a la barra de items, con iconos del tamaño de los de la hotbar.
+ * Las piezas que no se llevan muestran la ranura vacía del inventario; el desgaste se ve
+ * con la barra de durabilidad del propio juego.
  */
 public final class EquipmentPanel {
-	// '#' = píxel relleno, '.' = vacío
-	private static final String[] HELMET = {
-		"..######..", ".########.", "##########", "##########", "##########", "###....###", "###....###", "###....###"};
-	private static final String[] CHEST = {
-		"###......###", "############", "############", ".##########.", ".##########.", ".##########.", ".##########.", "..########..", "..########.."};
-	private static final String[] ELYTRA = {
-		"##..........##", "###........###", "####......####", "#####....#####", "#####....#####", ".####....####.", "..###....###..", "...##....##..."};
-	private static final String[] LEGS = {
-		"##########", "##########", "##########", "####..####", "###....###", "###....###", "###....###", "###....###"};
-	private static final String[] BOOTS = {
-		".##......##.", ".##......##.", ".##......##.", "####....####", "####....####", "####....####"};
+	private static final EquipmentSlot[] ARMOR = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+	private static final Identifier[] EMPTY_SLOT = {
+		Identifier.withDefaultNamespace("container/slot/helmet"),
+		Identifier.withDefaultNamespace("container/slot/chestplate"),
+		Identifier.withDefaultNamespace("container/slot/leggings"),
+		Identifier.withDefaultNamespace("container/slot/boots")};
 
+	private static final int ICON = 16;      // tamaño de un icono de la hotbar
+	private static final int ROW = 18;       // alto de cada fila en las columnas
+	private static final int SMALL = 10;     // tamaño de los iconos del perfil superior
 	private static final int GAP = 4;
 	private static final int MARGIN = 4;
-	private static final int EMPTY_COLOR = 0x802E3037;
-	private static final int WORN_COLOR = 0xFF3C3C40;
 
 	private static ItemStack chestIcon;
 
@@ -48,15 +44,14 @@ public final class EquipmentPanel {
 		if (cfg.equipmentMode == 1) top(g, mc, p, cfg); else sides(g, mc, p, cfg);
 	}
 
-	// ---------------------------------------------------------------- perfil 1: piezas flotando
+	// ---------------------------------------------------------------- perfil 1: armadura junto al panel
 	private static void top(GuiGraphicsExtractor g, Minecraft mc, LocalPlayer p, GuiTweaksConfig cfg) {
 		float s = cfg.scalePercent / 100f;
-		int w = 14;                       // ancho de la pieza más ancha (élitros)
+		int w = SMALL;
 		int h = StatusPanel.height();
 
-		boolean statusShown = StatusPanel.isVisible(mc);
 		int px;
-		if (statusShown) {
+		if (StatusPanel.isVisible(mc)) {
 			int statusW = Math.round(StatusPanel.width(cfg) * s);
 			px = cfg.isRight() ? Math.round(g.guiWidth() - MARGIN - statusW - GAP - w * s) : MARGIN + statusW + GAP;
 		} else {
@@ -66,149 +61,68 @@ public final class EquipmentPanel {
 		g.pose().pushMatrix();
 		g.pose().translate(px, MARGIN);
 		g.pose().scale(s, s);
-
-		// Sin recuadro ni manos: solo las piezas de armadura apiladas, centradas en la altura del panel
-		int y = (h - 34) / 2;
-		y = piece(g, HELMET, p.getItemBySlot(EquipmentSlot.HEAD), 0, y, 1, w) + 1;
-		y = piece(g, chestShape(p), p.getItemBySlot(EquipmentSlot.CHEST), 0, y, 1, w) + 1;
-		y = piece(g, LEGS, p.getItemBySlot(EquipmentSlot.LEGS), 0, y, 1, w) + 1;
-		piece(g, BOOTS, p.getItemBySlot(EquipmentSlot.FEET), 0, y, 1, w);
-
+		int y = (h - SMALL * ARMOR.length) / 2;
+		for (int i = 0; i < ARMOR.length; i++) {
+			icon(g, mc.font, p.getItemBySlot(ARMOR[i]), EMPTY_SLOT[i], 0, y + i * SMALL, SMALL);
+		}
 		g.pose().popMatrix();
 	}
 
-	// ---------------------------------------------------------------- perfil 2: columnas pequeñas
+	// ---------------------------------------------------------------- perfil 2: columnas junto a la hotbar
 	private static void sides(GuiGraphicsExtractor g, Minecraft mc, LocalPlayer p, GuiTweaksConfig cfg) {
 		Font font = mc.font;
-		int colW = 24, rowH = 12, pad = 2;
-		int arrows = countArrows(p);
-		int leftRows = arrows > 0 ? 4 : 3;
-		int free = freeSlots(p);
 		int tint = Draw.withAlpha(cfg.accentColor(), 30);   // fondo muy tenue del color de acento
-
 		int hotbarLeft = g.guiWidth() / 2 - 91;
 		int hotbarRight = g.guiWidth() / 2 + 91;
-		int bottom = g.guiHeight() - 3;
+		int arrows = countArrows(p);
 
-		// Izquierda (de arriba a abajo): mano izquierda, casco, pechera/élitros, flechas
-		int lh = leftRows * rowH + pad * 2;
-		int lx = hotbarLeft - 26 - colW, ly = bottom - lh;
-		Draw.rounded(g, lx, ly, colW, lh, tint);
-		int y = ly + pad;
-		smallItem(g, font, p.getOffhandItem(), lx + (colW - 10) / 2, y + 1);
-		y += rowH;
-		y = row(g, HELMET, p.getItemBySlot(EquipmentSlot.HEAD), lx, y, colW, rowH);
-		y = row(g, chestShape(p), p.getItemBySlot(EquipmentSlot.CHEST), lx, y, colW, rowH);
-		if (arrows > 0) counter(g, font, new ItemStack(Items.ARROW), String.valueOf(arrows), 0xFFFFFFFF, lx, y);
+		// Izquierda: sin ranura de mano izquierda (ya la dibuja el juego). Casco, pechera y flechas
+		// quedan apilados justo encima de esa ranura vanilla.
+		int rows = arrows > 0 ? 3 : 2;
+		int lx = hotbarLeft - 26;
+		int ly = g.guiHeight() - 24 - rows * ROW;
+		Draw.rounded(g, lx - 2, ly, ICON + 4, rows * ROW, tint);
+		icon(g, font, p.getItemBySlot(EquipmentSlot.HEAD), EMPTY_SLOT[0], lx, ly + 1, ICON);
+		icon(g, font, p.getItemBySlot(EquipmentSlot.CHEST), EMPTY_SLOT[1], lx, ly + ROW + 1, ICON);
+		if (arrows > 0) counter(g, font, new ItemStack(Items.ARROW), String.valueOf(arrows), 0xFFFFFFFF, lx, ly + ROW * 2 + 1);
 
-		// Derecha: mano derecha, pantalón, botas, espacios libres
-		int rh = 4 * rowH + pad * 2;
-		int rx = hotbarRight + 4, ry = bottom - rh;
-		Draw.rounded(g, rx, ry, colW, rh, tint);
-		y = ry + pad;
-		smallItem(g, font, p.getMainHandItem(), rx + (colW - 10) / 2, y + 1);
-		y += rowH;
-		y = row(g, LEGS, p.getItemBySlot(EquipmentSlot.LEGS), rx, y, colW, rowH);
-		y = row(g, BOOTS, p.getItemBySlot(EquipmentSlot.FEET), rx, y, colW, rowH);
+		// Derecha: mano derecha, pantalón, botas y espacios libres
+		int rx = hotbarRight + 8;
+		int ry = g.guiHeight() - 3 - 4 * ROW;
+		Draw.rounded(g, rx - 2, ry, ICON + 4, 4 * ROW, tint);
+		ItemStack hand = p.getMainHandItem();
+		if (!hand.isEmpty()) {
+			g.item(hand, rx, ry + 1);
+			g.itemDecorations(font, hand, rx, ry + 1);
+		}
+		icon(g, font, p.getItemBySlot(EquipmentSlot.LEGS), EMPTY_SLOT[2], rx, ry + ROW + 1, ICON);
+		icon(g, font, p.getItemBySlot(EquipmentSlot.FEET), EMPTY_SLOT[3], rx, ry + ROW * 2 + 1, ICON);
 		if (chestIcon == null) chestIcon = new ItemStack(Items.CHEST);
+		int free = freeSlots(p);
 		int freeColor = free <= 2 ? 0xFFFF6B6B : free <= 6 ? 0xFFFFD166 : 0xFFB8F5B8;
-		counter(g, font, chestIcon, String.valueOf(free), freeColor, rx, y);
+		counter(g, font, chestIcon, String.valueOf(free), freeColor, rx, ry + ROW * 3 + 1);
 	}
 
-	/** Una pieza de armadura centrada verticalmente en su fila; devuelve la Y de la fila siguiente. */
-	private static int row(GuiGraphicsExtractor g, String[] shape, ItemStack stack, int x, int y, int colW, int rowH) {
-		piece(g, shape, stack, x, y + (rowH - shape.length) / 2, 1, colW);
-		return y + rowH;
-	}
-
-	// ---------------------------------------------------------------- piezas
-	private static String[] chestShape(LocalPlayer p) {
-		return p.getItemBySlot(EquipmentSlot.CHEST).getItem() == Items.ELYTRA ? ELYTRA : CHEST;
-	}
-
-	/** Dibuja una silueta centrada en {@code areaW}; devuelve la Y de su borde inferior. */
-	private static int piece(GuiGraphicsExtractor g, String[] shape, ItemStack stack, int areaX, int y, int sc, int areaW) {
-		int w = shape[0].length() * sc;
-		int x = areaX + (areaW - w) / 2;
-		boolean empty = stack.isEmpty();
-		int color = empty ? EMPTY_COLOR : wornColor(stack);
-		int outline = empty ? 0x66000000 : 0xFF000000;
-		for (int[] d : new int[][] {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) drawShape(g, shape, x + d[0], y + d[1], sc, outline, false);
-		drawShape(g, shape, x, y, sc, color, !empty);
-		return y + shape.length * sc;
-	}
-
-	private static void drawShape(GuiGraphicsExtractor g, String[] shape, int x, int y, int sc, int color, boolean shaded) {
-		for (int r = 0; r < shape.length; r++) {
-			int c = shaded ? Draw.shade(color, 1.18f - 0.36f * r / Math.max(1, shape.length - 1)) : color;
-			String row = shape[r];
-			int start = -1;
-			for (int i = 0; i <= row.length(); i++) {
-				boolean on = i < row.length() && row.charAt(i) == '#';
-				if (on && start < 0) start = i;
-				if (!on && start >= 0) {
-					g.fill(x + start * sc, y + r * sc, x + i * sc, y + (r + 1) * sc, c);
-					start = -1;
-				}
-			}
-		}
-	}
-
-	/** Color del material, apagado hacia gris a medida que se desgasta. */
-	private static int wornColor(ItemStack stack) {
-		int base = materialColor(stack);
-		float frac = 1f;
-		if (stack.isDamageableItem() && stack.getMaxDamage() > 0) {
-			frac = Math.max(0f, Math.min(1f, (stack.getMaxDamage() - stack.getDamageValue()) / (float) stack.getMaxDamage()));
-		}
-		return Draw.lerp(base, WORN_COLOR, (1f - frac) * 0.85f);
-	}
-
-	private static int materialColor(ItemStack stack) {
-		if (stack.getItem() == Items.ELYTRA) return 0xFF9E8FB5;
-		Equippable eq = stack.get(DataComponents.EQUIPPABLE);
-		String id = eq != null && eq.assetId().isPresent() ? eq.assetId().get().identifier().getPath() : "";
-		if (id.contains("leather")) return 0xFF000000 | (DyedItemColor.getOrDefault(stack, 0xA06540) & 0xFFFFFF);
-		if (id.contains("chain")) return 0xFF9AA0A6;
-		if (id.contains("iron")) return 0xFFD8D8D8;
-		if (id.contains("gold")) return 0xFFFAD64A;
-		if (id.contains("diamond")) return 0xFF4AEDD9;
-		if (id.contains("netherite")) return 0xFF5B5559;
-		if (id.contains("turtle")) return 0xFF6FBF4A;
-		if (id.contains("copper")) return 0xFFE0795A;
-		return 0xFFBFC5CC;
-	}
-
-	// ---------------------------------------------------------------- items y contadores
-	private static final int SMALL = 10;   // lado del item reducido, en píxeles
-
-	/** Item reducido (10 px) con su cantidad si hay más de uno. */
-	private static void smallItem(GuiGraphicsExtractor g, Font font, ItemStack stack, int x, int y) {
-		if (stack.isEmpty()) return;
-		float sc = SMALL / 16f;
+	// ---------------------------------------------------------------- dibujo
+	/** Icono nativo del item (con su barra de durabilidad) o la ranura vacía, a {@code size} píxeles. */
+	private static void icon(GuiGraphicsExtractor g, Font font, ItemStack stack, Identifier emptySprite, int x, int y, int size) {
+		float sc = size / (float) ICON;
 		g.pose().pushMatrix();
 		g.pose().translate(x, y);
 		g.pose().scale(sc, sc);
-		g.item(stack, 0, 0);
-		g.pose().popMatrix();
-		if (stack.getCount() > 1) {
-			g.pose().pushMatrix();
-			g.pose().translate(x + SMALL - 1, y + SMALL - 3);
-			g.pose().scale(0.6f, 0.6f);
-			String n = String.valueOf(stack.getCount());
-			g.text(font, n, -font.width(n), 0, 0xFFFFFFFF);
-			g.pose().popMatrix();
+		if (stack.isEmpty()) {
+			g.blitSprite(RenderPipelines.GUI_TEXTURED, emptySprite, 0, 0, ICON, ICON, 0x66FFFFFF);
+		} else {
+			g.item(stack, 0, 0);
+			g.itemDecorations(font, stack, 0, 0);
 		}
+		g.pose().popMatrix();
 	}
 
-	/** Icono pequeño con un número al lado, en la fila que empieza en {@code y}. */
+	/** Icono con un número en la esquina inferior derecha, como la cantidad de un item. */
 	private static void counter(GuiGraphicsExtractor g, Font font, ItemStack icon, String text, int color, int x, int y) {
-		smallItem(g, font, icon, x + 2, y + 1);
-		g.pose().pushMatrix();
-		g.pose().translate(x + 14, y + 3);
-		g.pose().scale(0.75f, 0.75f);
-		g.text(font, text, 0, 0, color);
-		g.pose().popMatrix();
+		g.item(icon, x, y);
+		g.text(font, text, x + ICON + 1 - font.width(text), y + 9, color, true);
 	}
 
 	private static boolean isArrow(ItemStack s) {

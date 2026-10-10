@@ -2,6 +2,11 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.3.0
+- Equipo con los iconos nativos de los items (y su barra de durabilidad del juego) en los dos perfiles, en lugar de siluetas. Las piezas que no se llevan muestran la ranura vacía del inventario.
+- Perfil "Junto a la barra": iconos del mismo tamaño que los de la hotbar. Se quitó la ranura de la mano izquierda (el juego ya la dibuja): casco, pechera y flechas quedan apilados justo encima de ella. A la derecha: mano derecha, pantalón, botas y espacios libres.
+- Perfil "Armadura (arriba)": las cuatro piezas con iconos reducidos, alineadas con la altura del panel de estado.
+
 ## 0.2.2
 - Perfil de equipo "Junto a la barra" mucho más pequeño: items a 10 px, siluetas de armadura a la mitad, filas bajas y sin recuadro; solo un fondo muy tenue del color de acento.
 
