@@ -35,6 +35,16 @@ public class GuiTweaksConfig {
 	public int barWidth = 90;
 
 	public boolean showInfoPanel = true;
+	/** Estilo de la info: 0 = una línea bajo el panel, 1 = brújula plana arriba al centro. */
+	public int infoStyle = 1;
+	/** Marcadores de otros jugadores en la brújula. */
+	public boolean compassPlayers = true;
+	/** true = cabeza del jugador, false = punto de color. */
+	public boolean compassHeads = true;
+	/** Alcance de los marcadores, en bloques (50-1000). */
+	public int compassRange = 300;
+	/** Píxeles que se baja la brújula (para no pisar la barra de jefe). */
+	public int compassOffsetY = 0;
 	public boolean showFps = true;
 	public boolean showCoords = true;
 	public boolean showDirection = true;
@@ -106,7 +116,9 @@ public class GuiTweaksConfig {
 	public void copyFrom(GuiTweaksConfig o) {
 		side = o.side; hideVanillaBars = o.hideVanillaBars; showHead = o.showHead;
 		showNumbers = o.showNumbers; headEffects = o.headEffects; accent = o.accent; scalePercent = o.scalePercent;
-		opacityPercent = o.opacityPercent; barWidth = o.barWidth; showInfoPanel = o.showInfoPanel;
+		opacityPercent = o.opacityPercent; barWidth = o.barWidth; showInfoPanel = o.showInfoPanel; infoStyle = o.infoStyle;
+		compassPlayers = o.compassPlayers; compassHeads = o.compassHeads;
+		compassRange = o.compassRange; compassOffsetY = o.compassOffsetY;
 		showFps = o.showFps; showCoords = o.showCoords; showDirection = o.showDirection;
 		showQuickCommands = o.showQuickCommands; showPauseButton = o.showPauseButton; chatPanelCenter = o.chatPanelCenter; showItemPopup = o.showItemPopup;
 		popupSeconds = o.popupSeconds; showEffectsPanel = o.showEffectsPanel; equipmentMode = o.equipmentMode; hotbarStyle = o.hotbarStyle;
@@ -130,6 +142,9 @@ public class GuiTweaksConfig {
 		instance.barWidth = Math.max(60, Math.min(140, instance.barWidth));
 		instance.equipmentMode = Math.max(0, Math.min(2, instance.equipmentMode));
 		instance.mobDistance = Math.max(4, Math.min(64, instance.mobDistance));
+		instance.infoStyle = Math.max(0, Math.min(1, instance.infoStyle));
+		instance.compassRange = Math.max(50, Math.min(1000, instance.compassRange));
+		instance.compassOffsetY = Math.max(0, Math.min(60, instance.compassOffsetY));
 		instance.hotbarStyle = Math.max(0, Math.min(1, instance.hotbarStyle));
 		instance.popupSeconds = Math.max(1, Math.min(6, instance.popupSeconds));
 		if (instance.quickCommands == null) instance.quickCommands = defaultCommands();

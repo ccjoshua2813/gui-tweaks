@@ -66,9 +66,14 @@ public class GuiTweaksConfigScreen extends Screen {
 			}
 			case 1 -> {
 				items.add(toggle("info", () -> onOff(c.showInfoPanel), () -> c.showInfoPanel = !c.showInfoPanel));
+				items.add(toggle("info_style", () -> t("info_style." + c.infoStyle), () -> c.infoStyle = (c.infoStyle + 1) % 2));
 				items.add(toggle("fps", () -> onOff(c.showFps), () -> c.showFps = !c.showFps));
 				items.add(toggle("coords", () -> onOff(c.showCoords), () -> c.showCoords = !c.showCoords));
 				items.add(toggle("direction", () -> onOff(c.showDirection), () -> c.showDirection = !c.showDirection));
+				items.add(toggle("compass_players", () -> onOff(c.compassPlayers), () -> c.compassPlayers = !c.compassPlayers));
+				items.add(toggle("compass_heads", () -> onOff(c.compassHeads), () -> c.compassHeads = !c.compassHeads));
+				items.add(slider("compass_range", 50, 1000, 50, " m", () -> c.compassRange, v -> c.compassRange = v));
+				items.add(slider("compass_offset", 0, 60, 4, " px", () -> c.compassOffsetY, v -> c.compassOffsetY = v));
 				items.add(toggle("effects", () -> onOff(c.showEffectsPanel), () -> c.showEffectsPanel = !c.showEffectsPanel));
 				items.add(toggle("hotbar", () -> t("hotbar." + c.hotbarStyle), () -> c.hotbarStyle = (c.hotbarStyle + 1) % 2));
 				items.add(toggle("equipment", () -> t("equipment." + c.equipmentMode), () -> c.equipmentMode = (c.equipmentMode + 1) % 3));

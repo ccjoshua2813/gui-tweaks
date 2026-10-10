@@ -63,5 +63,12 @@
 	"guitweaks.config.mob_hostile": "Hostile mobs",
 	"guitweaks.config.mob_passive": "Non-hostile mobs",
 	"guitweaks.config.mob_players": "Players",
-	"guitweaks.config.pause_button": "Pause menu button"
+	"guitweaks.config.pause_button": "Pause menu button",
+	"guitweaks.config.info_style": "Info style",
+	"guitweaks.config.info_style.0": "Line",
+	"guitweaks.config.info_style.1": "Compass",
+	"guitweaks.config.compass_players": "Players on compass",
+	"guitweaks.config.compass_heads": "Player heads",
+	"guitweaks.config.compass_range": "Compass range",
+	"guitweaks.config.compass_offset": "Lower compass"
 }

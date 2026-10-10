@@ -63,5 +63,12 @@
 	"guitweaks.config.mob_hostile": "Hostiles",
 	"guitweaks.config.mob_passive": "No hostiles",
 	"guitweaks.config.mob_players": "Jugadores",
-	"guitweaks.config.pause_button": "Botón en la pausa"
+	"guitweaks.config.pause_button": "Botón en la pausa",
+	"guitweaks.config.info_style": "Estilo de info",
+	"guitweaks.config.info_style.0": "Línea",
+	"guitweaks.config.info_style.1": "Brújula",
+	"guitweaks.config.compass_players": "Jugadores en brújula",
+	"guitweaks.config.compass_heads": "Cabezas de jugador",
+	"guitweaks.config.compass_range": "Alcance brújula",
+	"guitweaks.config.compass_offset": "Bajar brújula"
 }

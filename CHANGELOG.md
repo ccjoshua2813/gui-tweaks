@@ -2,6 +2,12 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.7.0
+- Brújula plana arriba al centro (nuevo "Estilo de info: Brújula", activado por defecto; el estilo "Línea" sigue disponible): tira con N, NE, E, SE, S, SO, O, NO que se desplaza al girar, con marcas cada 15 grados y un puntero central.
+- Marcadores de otros jugadores sobre la brújula, con su cabeza (o un punto de color) en la dirección en que están. Usa el sistema de localizador del juego, así que incluye jugadores lejanos si el servidor los envía; si no, usa los jugadores cercanos. Los que quedan fuera de la vista se pegan al borde, atenuados. Los lejanos se ven más tenues.
+- FPS y coordenadas pasan a una línea centrada bajo la brújula.
+- Nuevas opciones (Info y efectos): estilo de info, jugadores en la brújula, cabezas o puntos, alcance (50 a 1000 bloques) y "Bajar brújula" (para no pisar la barra de jefe).
+
 ## 0.6.0
 - Botón "GUI Tweaks" en la esquina superior derecha de la pantalla de pausa (Esc) que abre la configuración sin depender de Mod Menu. Mismo estilo del mod, con un icono de controles deslizantes. Se puede quitar con la opción "Botón en la pausa" (pestaña Extras).
 - Los botones del chat y el de la pausa comparten ahora el mismo dibujo de caja (`Draw.buttonBox`), para que el estilo sea uniforme.
