@@ -2,8 +2,8 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
-## 0.10.2
-- Las barras de salto de la montura y de aire son más pequeñas y delgadas y van pegadas a la barra de items (salto: 110x4 px, aire: 64x4 px). Si se montan y hay aire a la vez, la de aire queda justo encima de la de salto.
+## 0.10.3
+- Barra de salto de la montura mucho más corta y fina (60x3 px), pegada a la barra de items. La barra de aire vuelve a su tamaño anterior (90x6 px, la 0.10.2 la había achicado de más).
 
 ## 0.10.1
 - Corrección: la 0.10.0 exigía Fabric API 0.161.0 o superior (la versión contra la que se compila) y no cargaba con la 0.160.0. El mínimo vuelve a ser 0.160.0, la versión con la que se ha probado el mod.
