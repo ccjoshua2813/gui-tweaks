@@ -74,5 +74,6 @@
 	"guitweaks.config.head3d": "Cabeza 3D",
 	"guitweaks.config.head3d_zoom": "Zoom cabeza 3D",
 	"guitweaks.config.head3d_height": "Altura cabeza 3D",
-	"guitweaks.config.info_style.2": "Brújula circular"
+	"guitweaks.config.info_style.2": "Brújula circular",
+	"guitweaks.config.arrow_trail": "Estela de flecha (experimental)"
 }

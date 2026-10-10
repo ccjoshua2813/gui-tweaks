@@ -74,5 +74,6 @@
 	"guitweaks.config.head3d": "3D head",
 	"guitweaks.config.head3d_zoom": "3D head zoom",
 	"guitweaks.config.head3d_height": "3D head height",
-	"guitweaks.config.info_style.2": "Round compass"
+	"guitweaks.config.info_style.2": "Round compass",
+	"guitweaks.config.arrow_trail": "Arrow trail (experimental)"
 }

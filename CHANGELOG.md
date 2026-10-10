@@ -2,6 +2,9 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.9.0
+- (Experimental) Estela de flecha (Extras → "Estela de flecha"), desactivada por defecto: al tensar un arco, o con una ballesta cargada, se dibuja en el mundo la trayectoria que seguiría la flecha, con el color de acento y desvaneciéndose con la distancia, y una marca en el punto donde chocaría con un bloque. Simula la física de la flecha del juego (gravedad, rozamiento, agua, tu propio movimiento) y se apoya en el sistema de "gizmos" del juego. Algunos servidores consideran estas ayudas de puntería como trampa: usar con cuidado.
+
 ## 0.8.0
 - Cabeza 3D opcional (pestaña Panel de estado → "Cabeza 3D", desactivada por defecto): el modelo real del jugador, con su skin, la capa del sombrero y el casco puesto, dibujado con el renderizador del inventario y recortado para mostrar solo la cabeza. Gira hacia el lado al mover el ratón y vuelve poco a poco al centro, y se inclina según miras arriba o abajo. Con sliders de zoom y altura para ajustar el encuadre.
 - Nuevo tercer estilo de info, "Brújula circular": dial redondo cuya rosa de los vientos gira al moverte, con rumbo en grados en el centro, puntero fijo arriba y los jugadores sobre el anillo (cabeza o punto). FPS y coordenadas debajo.

@@ -59,6 +59,8 @@ public class GuiTweaksConfig {
 	public boolean showQuickCommands = true;
 	/** Botón de configuración en la pantalla de pausa (Esc). */
 	public boolean showPauseButton = true;
+	/** (Experimental) Estela con la trayectoria de la flecha al apuntar con un arco o una ballesta cargada. */
+	public boolean arrowTrail = false;
 	/** Panel de comandos del chat: true = centrado en la pantalla, false = arriba. */
 	public boolean chatPanelCenter = true;
 	/** Aviso temporal con nombre, encantamientos y durabilidad al cambiar de item. */
@@ -126,7 +128,7 @@ public class GuiTweaksConfig {
 		compassPlayers = o.compassPlayers; compassHeads = o.compassHeads;
 		compassRange = o.compassRange; compassOffsetY = o.compassOffsetY;
 		showFps = o.showFps; showCoords = o.showCoords; showDirection = o.showDirection;
-		showQuickCommands = o.showQuickCommands; showPauseButton = o.showPauseButton; chatPanelCenter = o.chatPanelCenter; showItemPopup = o.showItemPopup;
+		showQuickCommands = o.showQuickCommands; showPauseButton = o.showPauseButton; arrowTrail = o.arrowTrail; chatPanelCenter = o.chatPanelCenter; showItemPopup = o.showItemPopup;
 		popupSeconds = o.popupSeconds; showEffectsPanel = o.showEffectsPanel; equipmentMode = o.equipmentMode; hotbarStyle = o.hotbarStyle;
 		showMobHealth = o.showMobHealth; mobDistance = o.mobDistance;
 		mobHostile = o.mobHostile; mobPassive = o.mobPassive; mobPlayers = o.mobPlayers;

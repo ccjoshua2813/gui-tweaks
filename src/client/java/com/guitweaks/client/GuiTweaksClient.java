@@ -13,6 +13,7 @@ public class GuiTweaksClient implements ClientModInitializer {
 		GuiTweaksConfig.load();
 		ChatQuickCommands.register();
 		PauseConfigButton.register();
+		net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents.BEFORE_GIZMOS.register(ArrowTrail::render);
 
 		// Las barras vanilla se ocultan según la config en vivo (sin reiniciar).
 		for (Identifier id : new Identifier[] {
