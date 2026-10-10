@@ -2,6 +2,10 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.4.0
+- Opacidad 0 = totalmente transparente: ya no se dibuja ni el borde ni la línea de acento, y el fondo tenue de las columnas de equipo y el panel del chat también siguen la opacidad. Los iconos "flotan".
+- Nueva opción "Barra de items" (Info y efectos): Vanilla o Estilo del mod. La barra del mod usa el mismo fondo, color de acento y opacidad que los demás paneles, con la casilla seleccionada siempre visible aunque el fondo sea transparente, y la mano secundaria en su propio recuadro. Los items se dibujan con el renderizador del juego, así que siguen el texture pack. Por defecto sigue siendo la vanilla.
+
 ## 0.3.0
 - Equipo con los iconos nativos de los items (y su barra de durabilidad del juego) en los dos perfiles, en lugar de siluetas. Las piezas que no se llevan muestran la ranura vacía del inventario.
 - Perfil "Junto a la barra": iconos del mismo tamaño que los de la hotbar. Se quitó la ranura de la mano izquierda (el juego ya la dibuja): casco, pechera y flechas quedan apilados justo encima de ella. A la derecha: mano derecha, pantalón, botas y espacios libres.

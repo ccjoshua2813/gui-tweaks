@@ -50,5 +50,8 @@
 	"guitweaks.config.equipment": "Equipment",
 	"guitweaks.config.equipment.0": "Off",
 	"guitweaks.config.equipment.1": "Armor (top)",
-	"guitweaks.config.equipment.2": "Beside hotbar"
+	"guitweaks.config.equipment.2": "Beside hotbar",
+	"guitweaks.config.hotbar": "Hotbar",
+	"guitweaks.config.hotbar.0": "Vanilla",
+	"guitweaks.config.hotbar.1": "Mod style"
 }

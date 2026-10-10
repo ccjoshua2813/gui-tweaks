@@ -49,6 +49,8 @@ public class GuiTweaksConfig {
 	public boolean showEffectsPanel = true;
 	/** Equipo: 0 = apagado, 1 = muñequito junto al panel, 2 = columnas junto a la barra de items. */
 	public int equipmentMode = 0;
+	/** Barra de items: 0 = vanilla, 1 = con el estilo del mod. */
+	public int hotbarStyle = 0;
 	public List<QuickCommand> quickCommands = defaultCommands();
 
 	/** Un botón del chat. {@code send}: ejecuta al instante; si no, deja el comando escrito en el chat. */
@@ -95,7 +97,7 @@ public class GuiTweaksConfig {
 		opacityPercent = o.opacityPercent; barWidth = o.barWidth; showInfoPanel = o.showInfoPanel;
 		showFps = o.showFps; showCoords = o.showCoords; showDirection = o.showDirection;
 		showQuickCommands = o.showQuickCommands; showItemPopup = o.showItemPopup;
-		popupSeconds = o.popupSeconds; showEffectsPanel = o.showEffectsPanel; equipmentMode = o.equipmentMode;
+		popupSeconds = o.popupSeconds; showEffectsPanel = o.showEffectsPanel; equipmentMode = o.equipmentMode; hotbarStyle = o.hotbarStyle;
 		quickCommands = new ArrayList<>();
 		for (QuickCommand q : o.quickCommands) quickCommands.add(new QuickCommand(q.label, q.command, q.send));
 	}
@@ -113,6 +115,7 @@ public class GuiTweaksConfig {
 		instance.opacityPercent = Math.max(0, Math.min(100, instance.opacityPercent));
 		instance.barWidth = Math.max(60, Math.min(140, instance.barWidth));
 		instance.equipmentMode = Math.max(0, Math.min(2, instance.equipmentMode));
+		instance.hotbarStyle = Math.max(0, Math.min(1, instance.hotbarStyle));
 		instance.popupSeconds = Math.max(1, Math.min(6, instance.popupSeconds));
 		if (instance.quickCommands == null) instance.quickCommands = defaultCommands();
 		while (instance.quickCommands.size() > MAX_QUICK_COMMANDS) instance.quickCommands.remove(instance.quickCommands.size() - 1);

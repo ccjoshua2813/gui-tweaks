@@ -50,5 +50,8 @@
 	"guitweaks.config.equipment": "Equipo",
 	"guitweaks.config.equipment.0": "Apagado",
 	"guitweaks.config.equipment.1": "Armadura (arriba)",
-	"guitweaks.config.equipment.2": "Junto a la barra"
+	"guitweaks.config.equipment.2": "Junto a la barra",
+	"guitweaks.config.hotbar": "Barra de items",
+	"guitweaks.config.hotbar.0": "Vanilla",
+	"guitweaks.config.hotbar.1": "Estilo del mod"
 }

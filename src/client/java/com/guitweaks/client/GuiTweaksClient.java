@@ -39,6 +39,12 @@ public class GuiTweaksClient implements ClientModInitializer {
 			Identifier.fromNamespaceAndPath(MOD_ID, "item_popup"),
 			(graphics, tickCounter) -> ItemPopup.render(graphics));
 
+		// La barra de items vanilla se sustituye por la del mod solo si el estilo está activado
+		HudElementRegistry.replaceElement(VanillaHudElements.HOTBAR, original -> (graphics, tickCounter) -> {
+			if (HotbarPanel.active(net.minecraft.client.Minecraft.getInstance())) HotbarPanel.render(graphics);
+			else original.extractRenderState(graphics, tickCounter);
+		});
+
 		// Se ocultan los equivalentes vanilla cuando el propio está activo
 		HudElementRegistry.replaceElement(VanillaHudElements.HELD_ITEM_TOOLTIP, original -> (graphics, tickCounter) -> {
 			if (!GuiTweaksConfig.get().showItemPopup) original.extractRenderState(graphics, tickCounter);

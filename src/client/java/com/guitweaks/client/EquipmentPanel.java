@@ -71,7 +71,7 @@ public final class EquipmentPanel {
 	// ---------------------------------------------------------------- perfil 2: columnas junto a la hotbar
 	private static void sides(GuiGraphicsExtractor g, Minecraft mc, LocalPlayer p, GuiTweaksConfig cfg) {
 		Font font = mc.font;
-		int tint = Draw.withAlpha(cfg.accentColor(), 30);   // fondo muy tenue del color de acento
+		int tint = Draw.withAlpha(cfg.accentColor(), Math.round(30 * Math.min(100, cfg.opacityPercent) / 70f));   // fondo muy tenue; con opacidad 0 desaparece
 		int hotbarLeft = g.guiWidth() / 2 - 91;
 		int hotbarRight = g.guiWidth() / 2 + 91;
 		int arrows = countArrows(p);
@@ -81,7 +81,7 @@ public final class EquipmentPanel {
 		int rows = arrows > 0 ? 3 : 2;
 		int lx = hotbarLeft - 26;
 		int ly = g.guiHeight() - 24 - rows * ROW;
-		Draw.rounded(g, lx - 2, ly, ICON + 4, rows * ROW, tint);
+		if (cfg.opacityPercent > 0) Draw.rounded(g, lx - 2, ly, ICON + 4, rows * ROW, tint);
 		icon(g, font, p.getItemBySlot(EquipmentSlot.HEAD), EMPTY_SLOT[0], lx, ly + 1, ICON);
 		icon(g, font, p.getItemBySlot(EquipmentSlot.CHEST), EMPTY_SLOT[1], lx, ly + ROW + 1, ICON);
 		if (arrows > 0) counter(g, font, new ItemStack(Items.ARROW), String.valueOf(arrows), 0xFFFFFFFF, lx, ly + ROW * 2 + 1);
@@ -89,7 +89,7 @@ public final class EquipmentPanel {
 		// Derecha: mano derecha, pantalón, botas y espacios libres
 		int rx = hotbarRight + 8;
 		int ry = g.guiHeight() - 3 - 4 * ROW;
-		Draw.rounded(g, rx - 2, ry, ICON + 4, 4 * ROW, tint);
+		if (cfg.opacityPercent > 0) Draw.rounded(g, rx - 2, ry, ICON + 4, 4 * ROW, tint);
 		ItemStack hand = p.getMainHandItem();
 		if (!hand.isEmpty()) {
 			g.item(hand, rx, ry + 1);

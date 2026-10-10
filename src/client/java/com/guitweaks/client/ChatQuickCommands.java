@@ -50,7 +50,7 @@ public final class ChatQuickCommands {
 
 			// Fondo de la tarjeta: se dibuja bajo los botones
 			ScreenEvents.afterBackground(screen).register((s, graphics, mouseX, mouseY, tickDelta) ->
-				Draw.card(graphics, x, TOP, w, h, cfg.accentColor(), Math.max(cfg.opacityPercent, 55)));
+				Draw.card(graphics, x, TOP, w, h, cfg.accentColor(), cfg.opacityPercent));
 
 			// Cada fila se centra por separado: se reparte desde el centro hacia los lados
 			for (int i = 0; i < entries.size(); i++) {

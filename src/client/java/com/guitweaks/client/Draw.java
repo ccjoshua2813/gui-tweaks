@@ -25,6 +25,7 @@ public final class Draw {
 
 	/** Tarjeta: borde fino, fondo translúcido y línea de acento arriba. */
 	public static void card(GuiGraphicsExtractor g, int x, int y, int w, int h, int accent, int opacityPercent) {
+		if (opacityPercent <= 0) return;   // totalmente transparente: los iconos "flotan"
 		int bgAlpha = Math.round(255 * opacityPercent / 100f);
 		rounded(g, x, y, w, h, withAlpha(0x000000, Math.min(255, bgAlpha + 40)));
 		rounded(g, x + 1, y + 1, w - 2, h - 2, withAlpha(0x14161C, bgAlpha));
