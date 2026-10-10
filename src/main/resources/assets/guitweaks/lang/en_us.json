@@ -53,5 +53,8 @@
 	"guitweaks.config.equipment.2": "Beside hotbar",
 	"guitweaks.config.hotbar": "Hotbar",
 	"guitweaks.config.hotbar.0": "Vanilla",
-	"guitweaks.config.hotbar.1": "Mod style"
+	"guitweaks.config.hotbar.1": "Mod style",
+	"guitweaks.config.chat_position": "Chat panel",
+	"guitweaks.config.chat_position.center": "Center",
+	"guitweaks.config.chat_position.top": "Top"
 }

@@ -41,6 +41,8 @@ public class GuiTweaksConfig {
 
 	/** Botones de comandos rápidos que aparecen al abrir el chat. */
 	public boolean showQuickCommands = true;
+	/** Panel de comandos del chat: true = centrado en la pantalla, false = arriba. */
+	public boolean chatPanelCenter = true;
 	/** Aviso temporal con nombre, encantamientos y durabilidad al cambiar de item. */
 	public boolean showItemPopup = true;
 	/** Segundos que se muestra el aviso del item (1-6). */
@@ -96,7 +98,7 @@ public class GuiTweaksConfig {
 		showNumbers = o.showNumbers; headEffects = o.headEffects; accent = o.accent; scalePercent = o.scalePercent;
 		opacityPercent = o.opacityPercent; barWidth = o.barWidth; showInfoPanel = o.showInfoPanel;
 		showFps = o.showFps; showCoords = o.showCoords; showDirection = o.showDirection;
-		showQuickCommands = o.showQuickCommands; showItemPopup = o.showItemPopup;
+		showQuickCommands = o.showQuickCommands; chatPanelCenter = o.chatPanelCenter; showItemPopup = o.showItemPopup;
 		popupSeconds = o.popupSeconds; showEffectsPanel = o.showEffectsPanel; equipmentMode = o.equipmentMode; hotbarStyle = o.hotbarStyle;
 		quickCommands = new ArrayList<>();
 		for (QuickCommand q : o.quickCommands) quickCommands.add(new QuickCommand(q.label, q.command, q.send));

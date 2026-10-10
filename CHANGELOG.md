@@ -2,6 +2,10 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.4.1
+- Panel de comandos del chat rediseñado: caja con el estilo del mod (opacidad y color de acento), botones pequeños en cuadrícula de 3 o 4 por fila (hasta 4 en una fila; 5-6 comandos en filas de 3), texto reducido si no cabe y resalte con el color de acento al pasar el ratón. Con opacidad 0 solo se ve el resalte.
+- Nueva opción "Panel del chat": Centro (por defecto) o Arriba.
+
 ## 0.4.0
 - Opacidad 0 = totalmente transparente: ya no se dibuja ni el borde ni la línea de acento, y el fondo tenue de las columnas de equipo y el panel del chat también siguen la opacidad. Los iconos "flotan".
 - Nueva opción "Barra de items" (Info y efectos): Vanilla o Estilo del mod. La barra del mod usa el mismo fondo, color de acento y opacidad que los demás paneles, con la casilla seleccionada siempre visible aunque el fondo sea transparente, y la mano secundaria en su propio recuadro. Los items se dibujan con el renderizador del juego, así que siguen el texture pack. Por defecto sigue siendo la vanilla.
