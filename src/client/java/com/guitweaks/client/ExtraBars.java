@@ -94,13 +94,14 @@ public final class ExtraBars {
 		if (max <= 0 || (air >= max && !under)) return;
 
 		float frac = Math.max(0f, Math.min(1f, air / (float) max));
-		int w = 90, h = 6;
-		int x = g.guiWidth() / 2 - (w + 13) / 2 + 13, y = g.guiHeight() - 22 - 26;
+		// Mismo grosor, ancho y posición que la barra de salto (nunca se usan a la vez)
+		int w = 120, h = 3;
+		int x = g.guiWidth() / 2 - w / 2, y = g.guiHeight() - 22 - 4 - h;
 		boolean low = frac < 0.2f;
 		int color = low ? 0xFFE53935 : Draw.lerp(0xFF4FC3F7, 0xFF8FE3FF, frac);
 		if (low && (System.currentTimeMillis() / 250) % 2 == 0) color = 0xFFFF8A80;
 
-		g.blitSprite(RenderPipelines.GUI_TEXTURED, AIR, x - 13, y - 2, 9, 9);
+		g.blitSprite(RenderPipelines.GUI_TEXTURED, AIR, x - 12, y - 3, 9, 9);
 		Draw.pill(g, x - 1, y - 1, w + 2, h + 2, 0xFF000000);
 		Draw.pill(g, x, y, w, h, 0xFF23252B);
 		if (frac > 0f) {

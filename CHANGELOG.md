@@ -2,6 +2,9 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.10.5
+- La barra de aire usa el mismo grosor (3 px), ancho (120 px) y posición que la barra de salto de la montura, para que ambas se vean homogéneas (nunca se usan a la vez). El icono de burbuja queda a su izquierda.
+
 ## 0.10.4
 - Vida de la montura (los iconos que el juego pone a la derecha sobre la barra de items): ahora va centrada sobre la barra de salto, un 25 % más pequeña, y usa los mismos iconos del juego (siguen el texture pack). Se oculta la vanilla junto a las demás barras.
 - Barra de salto más larga (120 px) con el mismo grosor.
