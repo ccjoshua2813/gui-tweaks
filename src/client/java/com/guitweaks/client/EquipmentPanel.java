@@ -77,45 +77,48 @@ public final class EquipmentPanel {
 		g.pose().popMatrix();
 	}
 
-	// ---------------------------------------------------------------- perfil 2: columnas
+	// ---------------------------------------------------------------- perfil 2: columnas pequeñas
 	private static void sides(GuiGraphicsExtractor g, Minecraft mc, LocalPlayer p, GuiTweaksConfig cfg) {
 		Font font = mc.font;
-		int colW = 30, rowH = 22;
+		int colW = 24, rowH = 12, pad = 2;
 		int arrows = countArrows(p);
 		int leftRows = arrows > 0 ? 4 : 3;
 		int free = freeSlots(p);
+		int tint = Draw.withAlpha(cfg.accentColor(), 30);   // fondo muy tenue del color de acento
 
 		int hotbarLeft = g.guiWidth() / 2 - 91;
 		int hotbarRight = g.guiWidth() / 2 + 91;
-		int bottom = g.guiHeight() - 2;
+		int bottom = g.guiHeight() - 3;
 
 		// Izquierda (de arriba a abajo): mano izquierda, casco, pechera/élitros, flechas
-		int lh = leftRows * rowH + 6;
-		int lx = hotbarLeft - 28 - colW, ly = bottom - lh;
-		Draw.card(g, lx, ly, colW, lh, cfg.accentColor(), cfg.opacityPercent);
-		int y = ly + 3;
-		handItem(g, font, p.getOffhandItem(), lx + (colW - 16) / 2, y + 3);
+		int lh = leftRows * rowH + pad * 2;
+		int lx = hotbarLeft - 26 - colW, ly = bottom - lh;
+		Draw.rounded(g, lx, ly, colW, lh, tint);
+		int y = ly + pad;
+		smallItem(g, font, p.getOffhandItem(), lx + (colW - 10) / 2, y + 1);
 		y += rowH;
-		piece(g, HELMET, p.getItemBySlot(EquipmentSlot.HEAD), lx, y + 2, 2, colW);
-		y += rowH;
-		piece(g, chestShape(p), p.getItemBySlot(EquipmentSlot.CHEST), lx, y + 2, 2, colW);
-		y += rowH;
-		if (arrows > 0) counter(g, font, new ItemStack(Items.ARROW), String.valueOf(arrows), 0xFFFFFFFF, lx, y, colW);
+		y = row(g, HELMET, p.getItemBySlot(EquipmentSlot.HEAD), lx, y, colW, rowH);
+		y = row(g, chestShape(p), p.getItemBySlot(EquipmentSlot.CHEST), lx, y, colW, rowH);
+		if (arrows > 0) counter(g, font, new ItemStack(Items.ARROW), String.valueOf(arrows), 0xFFFFFFFF, lx, y);
 
 		// Derecha: mano derecha, pantalón, botas, espacios libres
-		int rh = 4 * rowH + 6;
+		int rh = 4 * rowH + pad * 2;
 		int rx = hotbarRight + 4, ry = bottom - rh;
-		Draw.card(g, rx, ry, colW, rh, cfg.accentColor(), cfg.opacityPercent);
-		y = ry + 3;
-		handItem(g, font, p.getMainHandItem(), rx + (colW - 16) / 2, y + 3);
+		Draw.rounded(g, rx, ry, colW, rh, tint);
+		y = ry + pad;
+		smallItem(g, font, p.getMainHandItem(), rx + (colW - 10) / 2, y + 1);
 		y += rowH;
-		piece(g, LEGS, p.getItemBySlot(EquipmentSlot.LEGS), rx, y + 2, 2, colW);
-		y += rowH;
-		piece(g, BOOTS, p.getItemBySlot(EquipmentSlot.FEET), rx, y + 4, 2, colW);
-		y += rowH;
+		y = row(g, LEGS, p.getItemBySlot(EquipmentSlot.LEGS), rx, y, colW, rowH);
+		y = row(g, BOOTS, p.getItemBySlot(EquipmentSlot.FEET), rx, y, colW, rowH);
 		if (chestIcon == null) chestIcon = new ItemStack(Items.CHEST);
 		int freeColor = free <= 2 ? 0xFFFF6B6B : free <= 6 ? 0xFFFFD166 : 0xFFB8F5B8;
-		counter(g, font, chestIcon, String.valueOf(free), freeColor, rx, y, colW);
+		counter(g, font, chestIcon, String.valueOf(free), freeColor, rx, y);
+	}
+
+	/** Una pieza de armadura centrada verticalmente en su fila; devuelve la Y de la fila siguiente. */
+	private static int row(GuiGraphicsExtractor g, String[] shape, ItemStack stack, int x, int y, int colW, int rowH) {
+		piece(g, shape, stack, x, y + (rowH - shape.length) / 2, 1, colW);
+		return y + rowH;
 	}
 
 	// ---------------------------------------------------------------- piezas
@@ -177,21 +180,35 @@ public final class EquipmentPanel {
 	}
 
 	// ---------------------------------------------------------------- items y contadores
-	private static void handItem(GuiGraphicsExtractor g, Font font, ItemStack stack, int x, int y) {
-		Draw.rounded(g, x - 1, y - 1, 18, 18, 0x50000000);
+	private static final int SMALL = 10;   // lado del item reducido, en píxeles
+
+	/** Item reducido (10 px) con su cantidad si hay más de uno. */
+	private static void smallItem(GuiGraphicsExtractor g, Font font, ItemStack stack, int x, int y) {
 		if (stack.isEmpty()) return;
-		g.item(stack, x, y);
-		g.itemDecorations(font, stack, x, y);
+		float sc = SMALL / 16f;
+		g.pose().pushMatrix();
+		g.pose().translate(x, y);
+		g.pose().scale(sc, sc);
+		g.item(stack, 0, 0);
+		g.pose().popMatrix();
+		if (stack.getCount() > 1) {
+			g.pose().pushMatrix();
+			g.pose().translate(x + SMALL - 1, y + SMALL - 3);
+			g.pose().scale(0.6f, 0.6f);
+			String n = String.valueOf(stack.getCount());
+			g.text(font, n, -font.width(n), 0, 0xFFFFFFFF);
+			g.pose().popMatrix();
+		}
 	}
 
-	/** Icono pequeño con un número al lado, centrado en la fila. */
-	private static void counter(GuiGraphicsExtractor g, Font font, ItemStack icon, String text, int color, int x, int y, int colW) {
+	/** Icono pequeño con un número al lado, en la fila que empieza en {@code y}. */
+	private static void counter(GuiGraphicsExtractor g, Font font, ItemStack icon, String text, int color, int x, int y) {
+		smallItem(g, font, icon, x + 2, y + 1);
 		g.pose().pushMatrix();
-		g.pose().translate(x + 3, y + 3);
+		g.pose().translate(x + 14, y + 3);
 		g.pose().scale(0.75f, 0.75f);
-		g.item(icon, 0, 0);
+		g.text(font, text, 0, 0, color);
 		g.pose().popMatrix();
-		g.text(font, text, x + 3 + 13, y + 7, color);
 	}
 
 	private static boolean isArrow(ItemStack s) {

@@ -2,6 +2,9 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.2.2
+- Perfil de equipo "Junto a la barra" mucho más pequeño: items a 10 px, siluetas de armadura a la mitad, filas bajas y sin recuadro; solo un fondo muy tenue del color de acento.
+
 ## 0.2.1
 - Perfil de equipo "Armadura (arriba)": ahora solo muestra las piezas de armadura flotando junto al panel de estado, sin recuadro y sin los items de las manos.
 
