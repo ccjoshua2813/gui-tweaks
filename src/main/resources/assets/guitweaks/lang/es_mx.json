@@ -70,5 +70,9 @@
 	"guitweaks.config.compass_players": "Jugadores en brújula",
 	"guitweaks.config.compass_heads": "Cabezas de jugador",
 	"guitweaks.config.compass_range": "Alcance brújula",
-	"guitweaks.config.compass_offset": "Bajar brújula"
+	"guitweaks.config.compass_offset": "Bajar brújula",
+	"guitweaks.config.head3d": "Cabeza 3D",
+	"guitweaks.config.head3d_zoom": "Zoom cabeza 3D",
+	"guitweaks.config.head3d_height": "Altura cabeza 3D",
+	"guitweaks.config.info_style.2": "Brújula circular"
 }

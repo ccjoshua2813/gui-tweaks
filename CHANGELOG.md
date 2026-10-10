@@ -2,6 +2,10 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.8.0
+- Cabeza 3D opcional (pestaña Panel de estado → "Cabeza 3D", desactivada por defecto): el modelo real del jugador, con su skin, la capa del sombrero y el casco puesto, dibujado con el renderizador del inventario y recortado para mostrar solo la cabeza. Gira hacia el lado al mover el ratón y vuelve poco a poco al centro, y se inclina según miras arriba o abajo. Con sliders de zoom y altura para ajustar el encuadre.
+- Nuevo tercer estilo de info, "Brújula circular": dial redondo cuya rosa de los vientos gira al moverte, con rumbo en grados en el centro, puntero fijo arriba y los jugadores sobre el anillo (cabeza o punto). FPS y coordenadas debajo.
+
 ## 0.7.0
 - Brújula plana arriba al centro (nuevo "Estilo de info: Brújula", activado por defecto; el estilo "Línea" sigue disponible): tira con N, NE, E, SE, S, SO, O, NO que se desplaza al girar, con marcas cada 15 grados y un puntero central.
 - Marcadores de otros jugadores sobre la brújula, con su cabeza (o un punto de color) en la dirección en que están. Usa el sistema de localizador del juego, así que incluye jugadores lejanos si el servidor los envía; si no, usa los jugadores cercanos. Los que quedan fuera de la vista se pegan al borde, atenuados. Los lejanos se ven más tenues.

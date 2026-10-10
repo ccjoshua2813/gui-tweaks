@@ -41,6 +41,10 @@ public final class CompassBar {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.player == null || mc.level == null) return;
 
+		if (cfg.infoStyle == 2) {
+			renderDial(g, mc, cfg);
+			return;
+		}
 		boolean strip = cfg.showDirection;
 		boolean markers = strip && cfg.compassPlayers;
 		boolean info = cfg.showFps || cfg.showCoords;
@@ -74,6 +78,112 @@ public final class CompassBar {
 		}
 		if (info) drawInfo(g, font, mc, cfg, cx, y);
 		g.pose().popMatrix();
+	}
+
+	// ---------------------------------------------------------------- brújula circular
+	private static final int DIAL_R = 22;
+
+	/** Dial redondo: la rosa de los vientos gira al moverte y los jugadores quedan sobre el anillo. */
+	private static void renderDial(GuiGraphicsExtractor g, Minecraft mc, GuiTweaksConfig cfg) {
+		boolean dial = cfg.showDirection;
+		boolean info = cfg.showFps || cfg.showCoords;
+		if (!dial && !info) return;
+
+		Font font = mc.font;
+		Entity cam = mc.getCameraEntity() != null ? mc.getCameraEntity() : mc.player;
+		float partial = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+		float yaw = cam.getViewYRot(partial);
+
+		int infoW = info ? infoWidth(font, mc, cfg) + 2 : 0;
+		int dialSize = dial ? (DIAL_R + 6) * 2 : 0;
+		int w = Math.max(dialSize, infoW) + PAD * 2;
+		int h = PAD + (dial ? dialSize + (info ? 2 : 0) : 0) + (info ? INFO_H : 0) + PAD;
+		float s = cfg.scalePercent / 100f;
+		int px = Math.round(g.guiWidth() / 2f - w * s / 2f);
+		int py = TOP + cfg.compassOffsetY;
+
+		g.pose().pushMatrix();
+		g.pose().translate(px, py);
+		g.pose().scale(s, s);
+		Draw.card(g, 0, 0, w, h, cfg.accentColor(), cfg.opacityPercent);
+
+		int cx = w / 2;
+		int y = PAD;
+		if (dial) {
+			int cy = y + dialSize / 2;
+			int accent = cfg.accentColor();
+			float heading = Mth.wrapDegrees(yaw + 180f);
+
+			// Anillo con marcas cada 10 grados; las de los puntos cardinales son más largas
+			for (int b = 0; b < 360; b += 10) {
+				double ang = Math.toRadians(b - heading);
+				int len = b % 90 == 0 ? 4 : b % 30 == 0 ? 3 : 1;
+				int color = b == 0 ? Draw.withAlpha(accent, 255) : Draw.withAlpha(0xFFFFFF, b % 90 == 0 ? 220 : 90);
+				for (int i = 0; i < len; i++) {
+					int tx = cx + (int) Math.round(Math.sin(ang) * (DIAL_R - i));
+					int ty = cy - (int) Math.round(Math.cos(ang) * (DIAL_R - i));
+					g.fill(tx, ty, tx + 1, ty + 1, color);
+				}
+			}
+			// Letras dentro del anillo, siempre derechas
+			String[] letters = {"N", "E", "S", "O"};
+			for (int k = 0; k < 4; k++) {
+				double ang = Math.toRadians(k * 90 - heading);
+				float tw = font.width(letters[k]) * TEXT_SCALE;
+				float lx = cx + (float) (Math.sin(ang) * (DIAL_R - 9)) - tw / 2f;
+				float ly = cy - (float) (Math.cos(ang) * (DIAL_R - 9)) - 3.5f;
+				g.pose().pushMatrix();
+				g.pose().translate(lx, ly);
+				g.pose().scale(TEXT_SCALE, TEXT_SCALE);
+				g.text(font, letters[k], 0, 0, k == 0 ? Draw.withAlpha(accent, 255) : 0xFFFFFFFF, true);
+				g.pose().popMatrix();
+			}
+			// Puntero fijo arriba
+			g.fill(cx - 1, cy - DIAL_R - 4, cx + 2, cy - DIAL_R - 3, Draw.withAlpha(accent, 255));
+			g.fill(cx, cy - DIAL_R - 3, cx + 1, cy - DIAL_R - 2, Draw.withAlpha(accent, 255));
+			// Rumbo en grados, en el centro
+			String deg = Math.round(heading < 0 ? heading + 360 : heading) + "\u00b0";
+			float dw = font.width(deg) * 0.7f;
+			g.pose().pushMatrix();
+			g.pose().translate(cx - dw / 2f, cy - 3);
+			g.pose().scale(0.7f, 0.7f);
+			g.text(font, deg, 0, 0, 0xFFC8C8C8, true);
+			g.pose().popMatrix();
+
+			// Jugadores sobre el anillo
+			if (cfg.compassPlayers) {
+				List<Marker> list = collect(mc, cfg, cam, partial, yaw);
+				list.sort(Comparator.comparingDouble(Marker::distance).reversed());
+				for (Marker m : list) {
+					double ang = Math.toRadians(m.angle());
+					int mx = cx + (int) Math.round(Math.sin(ang) * (DIAL_R + 1));
+					int my = cy - (int) Math.round(Math.cos(ang) * (DIAL_R + 1));
+					float near = 1f - 0.45f * (float) Math.min(1.0, m.distance() / cfg.compassRange);
+					int alpha = Math.round(255 * near);
+					PlayerInfo pi = cfg.compassHeads && m.id() != null && mc.getConnection() != null
+						? mc.getConnection().getPlayerInfo(m.id()) : null;
+					if (pi != null) {
+						g.fill(mx - 5, my - 5, mx + 5, my + 5, 0xFF000000);
+						PlayerFaceExtractor.extractRenderState(g, pi.getSkin(), mx - 4, my - 4, 8);
+					} else {
+						g.fill(mx - 3, my - 3, mx + 3, my + 3, Draw.withAlpha(0x000000, alpha));
+						g.fill(mx - 2, my - 2, mx + 2, my + 2, Draw.withAlpha(m.color(), alpha));
+					}
+				}
+			}
+			y += dialSize + (info ? 2 : 0);
+		}
+		if (info) drawInfo(g, font, mc, cfg, cx, y);
+		g.pose().popMatrix();
+	}
+
+	private static int infoWidth(Font font, Minecraft mc, GuiTweaksConfig cfg) {
+		float total = 0;
+		int n = 0;
+		if (cfg.showFps) { total += font.width("FPS") + 3 + font.width("999"); n++; }
+		if (cfg.showCoords) { total += font.width("XYZ") + 3 + font.width("-0000 000 -0000"); n++; }
+		total += 8 * Math.max(0, n - 1);
+		return Math.round(total * TEXT_SCALE);
 	}
 
 	// ---------------------------------------------------------------- tira de direcciones

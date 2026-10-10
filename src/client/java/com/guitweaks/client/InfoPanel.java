@@ -21,7 +21,7 @@ public final class InfoPanel {
 
 	/** Alto (en píxeles de pantalla) que ocupa el panel de info más el espacio de abajo; 0 si no se ve. */
 	public static int occupiedHeight(GuiTweaksConfig cfg) {
-		if (cfg.infoStyle == 1) return 0;   // la brújula va arriba al centro, no bajo el panel de estado
+		if (cfg.infoStyle >= 1) return 0;   // la brújula va arriba al centro, no bajo el panel de estado
 		if (!cfg.showInfoPanel || !(cfg.showFps || cfg.showCoords || cfg.showDirection)) return 0;
 		return Math.round((9 + PAD_Y * 2 + 3) * cfg.scalePercent / 100f * TEXT_SCALE);
 	}
@@ -30,7 +30,7 @@ public final class InfoPanel {
 		GuiTweaksConfig cfg = GuiTweaksConfig.get();
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.player == null || !cfg.showInfoPanel) return;
-		if (cfg.infoStyle == 1) {
+		if (cfg.infoStyle >= 1) {
 			CompassBar.render(g);
 			return;
 		}

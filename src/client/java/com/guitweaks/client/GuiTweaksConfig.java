@@ -23,6 +23,12 @@ public class GuiTweaksConfig {
 	public String side = "RIGHT";
 	public boolean hideVanillaBars = true;
 	public boolean showHead = true;
+	/** Cabeza en 3D que gira con la cámara, en vez de la cara plana. */
+	public boolean head3d = false;
+	/** Zoom de la cabeza 3D en porcentaje (50-150). */
+	public int head3dZoom = 100;
+	/** Ajuste de altura de la cabeza 3D, en centésimas de bloque (-30 a 30). */
+	public int head3dHeight = 0;
 	public boolean showNumbers = true;
 	/** Animaciones sobre la cabeza: fuego, golpes, flechas, veneno, etc. */
 	public boolean headEffects = true;
@@ -35,7 +41,7 @@ public class GuiTweaksConfig {
 	public int barWidth = 90;
 
 	public boolean showInfoPanel = true;
-	/** Estilo de la info: 0 = una línea bajo el panel, 1 = brújula plana arriba al centro. */
+	/** Estilo de la info: 0 = una línea bajo el panel, 1 = brújula plana, 2 = brújula circular (arriba al centro). */
 	public int infoStyle = 1;
 	/** Marcadores de otros jugadores en la brújula. */
 	public boolean compassPlayers = true;
@@ -114,7 +120,7 @@ public class GuiTweaksConfig {
 	}
 
 	public void copyFrom(GuiTweaksConfig o) {
-		side = o.side; hideVanillaBars = o.hideVanillaBars; showHead = o.showHead;
+		side = o.side; hideVanillaBars = o.hideVanillaBars; showHead = o.showHead; head3d = o.head3d; head3dZoom = o.head3dZoom; head3dHeight = o.head3dHeight;
 		showNumbers = o.showNumbers; headEffects = o.headEffects; accent = o.accent; scalePercent = o.scalePercent;
 		opacityPercent = o.opacityPercent; barWidth = o.barWidth; showInfoPanel = o.showInfoPanel; infoStyle = o.infoStyle;
 		compassPlayers = o.compassPlayers; compassHeads = o.compassHeads;
@@ -142,7 +148,9 @@ public class GuiTweaksConfig {
 		instance.barWidth = Math.max(60, Math.min(140, instance.barWidth));
 		instance.equipmentMode = Math.max(0, Math.min(2, instance.equipmentMode));
 		instance.mobDistance = Math.max(4, Math.min(64, instance.mobDistance));
-		instance.infoStyle = Math.max(0, Math.min(1, instance.infoStyle));
+		instance.infoStyle = Math.max(0, Math.min(2, instance.infoStyle));
+		instance.head3dZoom = Math.max(50, Math.min(150, instance.head3dZoom));
+		instance.head3dHeight = Math.max(-30, Math.min(30, instance.head3dHeight));
 		instance.compassRange = Math.max(50, Math.min(1000, instance.compassRange));
 		instance.compassOffsetY = Math.max(0, Math.min(60, instance.compassOffsetY));
 		instance.hotbarStyle = Math.max(0, Math.min(1, instance.hotbarStyle));

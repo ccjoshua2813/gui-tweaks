@@ -55,6 +55,9 @@ public class GuiTweaksConfigScreen extends Screen {
 			case 0 -> {
 				items.add(toggle("side", () -> t(c.isRight() ? "side.right" : "side.left"), () -> c.side = c.isRight() ? "LEFT" : "RIGHT"));
 				items.add(toggle("head", () -> onOff(c.showHead), () -> c.showHead = !c.showHead));
+				items.add(toggle("head3d", () -> onOff(c.head3d), () -> c.head3d = !c.head3d));
+				items.add(slider("head3d_zoom", 50, 150, 5, "%", () -> c.head3dZoom, v -> c.head3dZoom = v));
+				items.add(slider("head3d_height", -30, 30, 2, "", () -> c.head3dHeight, v -> c.head3dHeight = v));
 				items.add(toggle("head_effects", () -> onOff(c.headEffects), () -> c.headEffects = !c.headEffects));
 				items.add(toggle("numbers", () -> onOff(c.showNumbers), () -> c.showNumbers = !c.showNumbers));
 				items.add(toggle("accent", () -> t("accent." + GuiTweaksConfig.ACCENT_KEYS[c.accent % GuiTweaksConfig.ACCENTS.length]),
@@ -66,7 +69,7 @@ public class GuiTweaksConfigScreen extends Screen {
 			}
 			case 1 -> {
 				items.add(toggle("info", () -> onOff(c.showInfoPanel), () -> c.showInfoPanel = !c.showInfoPanel));
-				items.add(toggle("info_style", () -> t("info_style." + c.infoStyle), () -> c.infoStyle = (c.infoStyle + 1) % 2));
+				items.add(toggle("info_style", () -> t("info_style." + c.infoStyle), () -> c.infoStyle = (c.infoStyle + 1) % 3));
 				items.add(toggle("fps", () -> onOff(c.showFps), () -> c.showFps = !c.showFps));
 				items.add(toggle("coords", () -> onOff(c.showCoords), () -> c.showCoords = !c.showCoords));
 				items.add(toggle("direction", () -> onOff(c.showDirection), () -> c.showDirection = !c.showDirection));

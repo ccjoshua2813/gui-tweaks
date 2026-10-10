@@ -70,5 +70,9 @@
 	"guitweaks.config.compass_players": "Players on compass",
 	"guitweaks.config.compass_heads": "Player heads",
 	"guitweaks.config.compass_range": "Compass range",
-	"guitweaks.config.compass_offset": "Lower compass"
+	"guitweaks.config.compass_offset": "Lower compass",
+	"guitweaks.config.head3d": "3D head",
+	"guitweaks.config.head3d_zoom": "3D head zoom",
+	"guitweaks.config.head3d_height": "3D head height",
+	"guitweaks.config.info_style.2": "Round compass"
 }

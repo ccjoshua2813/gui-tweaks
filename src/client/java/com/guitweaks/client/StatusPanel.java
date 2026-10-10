@@ -81,7 +81,12 @@ public final class StatusPanel {
 		if (cfg.showHead) {
 			Draw.rounded(g, x - 1, y - 1, HEAD + 2, HEAD + 2, Draw.withAlpha(accent, 255));
 			int shake = cfg.headEffects ? HeadEffects.shake(p) : 0;
-			PlayerFaceExtractor.extractRenderState(g, p.getSkin(), x + shake, y, HEAD);
+			if (cfg.head3d) {
+				g.fill(x, y, x + HEAD, y + HEAD, 0xFF14161C);
+				Head3D.draw(g, p, Math.round(px + (x + shake) * s), Math.round(MARGIN + y * s), Math.round(HEAD * s), cfg);
+			} else {
+				PlayerFaceExtractor.extractRenderState(g, p.getSkin(), x + shake, y, HEAD);
+			}
 			if (cfg.headEffects) HeadEffects.render(g, p, x, y, HEAD);
 			// Insignia del nivel sobre la esquina inferior de la cabeza
 			String level = String.valueOf(p.experienceLevel);
