@@ -22,7 +22,7 @@ public final class MobHealthPanel {
 	private static final int BAR_H = 5;
 	private static final int PAD = 4;
 	private static final float TEXT_SCALE = 0.8f;
-	private static final long HOLD_MS = 800, FADE_MS = 400;
+	private static final long HOLD_MS = 120, FADE_MS = 220;
 
 	private static LivingEntity target;
 	private static long lastSeen;

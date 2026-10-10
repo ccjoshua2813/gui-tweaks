@@ -2,6 +2,9 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.5.1
+- Barra de vida de mobs: la tarjeta ya no se queda tras dejar de apuntar al mob (antes 0,8 s de espera más 0,4 s de desvanecido; ahora 0,12 s más 0,22 s), para que no llene la pantalla al pasar la vista por varios mobs seguidos.
+
 ## 0.5.0
 - Barra de vida de mobs: al apuntar a un mob dentro de la distancia configurada (4 a 64 bloques), aparece bajo la cruz una tarjeta pequeña con su nombre, una barra en píldora (verde a rojo según la vida) y el valor. No se ve a través de bloques, se mantiene un instante al dejar de apuntar y se desvanece. La vida mostrada se acerca suavemente a la real.
 - Nueva pestaña "Mobs" en la configuración: activar, distancia y filtros de hostiles, no hostiles y jugadores (estos últimos desactivados por defecto).
