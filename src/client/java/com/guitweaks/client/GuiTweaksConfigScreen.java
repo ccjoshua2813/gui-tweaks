@@ -76,7 +76,7 @@ public class GuiTweaksConfigScreen extends Screen {
 				items.add(toggle("compass_players", () -> onOff(c.compassPlayers), () -> c.compassPlayers = !c.compassPlayers));
 				items.add(toggle("compass_heads", () -> onOff(c.compassHeads), () -> c.compassHeads = !c.compassHeads));
 				items.add(slider("compass_range", 50, 1000, 50, " m", () -> c.compassRange, v -> c.compassRange = v));
-				items.add(slider("compass_offset", 0, 60, 4, " px", () -> c.compassOffsetY, v -> c.compassOffsetY = v));
+				items.add(slider("compass_offset", 0, 100, 5, " %", () -> c.compassDropPercent, v -> c.compassDropPercent = v));
 				items.add(toggle("effects", () -> onOff(c.showEffectsPanel), () -> c.showEffectsPanel = !c.showEffectsPanel));
 				items.add(toggle("hotbar", () -> t("hotbar." + c.hotbarStyle), () -> c.hotbarStyle = (c.hotbarStyle + 1) % 2));
 				items.add(toggle("equipment", () -> t("equipment." + c.equipmentMode), () -> c.equipmentMode = (c.equipmentMode + 1) % 3));

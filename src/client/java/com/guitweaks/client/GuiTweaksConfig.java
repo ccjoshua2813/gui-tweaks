@@ -50,7 +50,9 @@ public class GuiTweaksConfig {
 	/** Alcance de los marcadores, en bloques (50-1000). */
 	public int compassRange = 300;
 	/** Píxeles que se baja la brújula (para no pisar la barra de jefe). */
-	public int compassOffsetY = 0;
+	public int compassOffsetY = 0;   // en desuso: sustituido por compassDropPercent
+	/** Cuánto baja la brújula, de 0 (arriba) a 100 (justo por encima de las barras de salto, aire y montura). */
+	public int compassDropPercent = 0;
 	public boolean showFps = true;
 	public boolean showCoords = true;
 	public boolean showDirection = true;
@@ -126,7 +128,7 @@ public class GuiTweaksConfig {
 		showNumbers = o.showNumbers; headEffects = o.headEffects; accent = o.accent; scalePercent = o.scalePercent;
 		opacityPercent = o.opacityPercent; barWidth = o.barWidth; showInfoPanel = o.showInfoPanel; infoStyle = o.infoStyle;
 		compassPlayers = o.compassPlayers; compassHeads = o.compassHeads;
-		compassRange = o.compassRange; compassOffsetY = o.compassOffsetY;
+		compassRange = o.compassRange; compassOffsetY = o.compassOffsetY; compassDropPercent = o.compassDropPercent;
 		showFps = o.showFps; showCoords = o.showCoords; showDirection = o.showDirection;
 		showQuickCommands = o.showQuickCommands; showPauseButton = o.showPauseButton; arrowTrail = o.arrowTrail; chatPanelCenter = o.chatPanelCenter; showItemPopup = o.showItemPopup;
 		popupSeconds = o.popupSeconds; showEffectsPanel = o.showEffectsPanel; equipmentMode = o.equipmentMode; hotbarStyle = o.hotbarStyle;
@@ -148,7 +150,7 @@ public class GuiTweaksConfig {
 			case 1 -> {
 				showInfoPanel = d.showInfoPanel; infoStyle = d.infoStyle; showFps = d.showFps; showCoords = d.showCoords;
 				showDirection = d.showDirection; compassPlayers = d.compassPlayers; compassHeads = d.compassHeads;
-				compassRange = d.compassRange; compassOffsetY = d.compassOffsetY; showEffectsPanel = d.showEffectsPanel;
+				compassRange = d.compassRange; compassOffsetY = d.compassOffsetY; compassDropPercent = d.compassDropPercent; showEffectsPanel = d.showEffectsPanel;
 				hotbarStyle = d.hotbarStyle; equipmentMode = d.equipmentMode;
 			}
 			case 2 -> {
@@ -181,6 +183,7 @@ public class GuiTweaksConfig {
 		instance.head3dHeight = Math.max(-30, Math.min(30, instance.head3dHeight));
 		instance.compassRange = Math.max(50, Math.min(1000, instance.compassRange));
 		instance.compassOffsetY = Math.max(0, Math.min(60, instance.compassOffsetY));
+		instance.compassDropPercent = Math.max(0, Math.min(100, instance.compassDropPercent));
 		instance.hotbarStyle = Math.max(0, Math.min(1, instance.hotbarStyle));
 		instance.popupSeconds = Math.max(1, Math.min(6, instance.popupSeconds));
 		if (instance.quickCommands == null) instance.quickCommands = defaultCommands();

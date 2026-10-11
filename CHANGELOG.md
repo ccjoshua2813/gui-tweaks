@@ -2,6 +2,11 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.11.0
+- Brújula: con "Cabezas de jugador" activado ya no se dibujan puntos de color, solo cabezas (las que quedan al borde de la vista se ven atenuadas). Con la opción desactivada se usan puntos.
+- Brújula: "Bajar brújula" ahora es un porcentaje (0 a 100 %) y llega casi hasta abajo, justo por encima de la zona de la barra de salto, la de aire y la vida de la montura. Sustituye al ajuste anterior en píxeles.
+- Brújula: más espacio vertical en la fila de cabezas y una flechita ▲ o ▼ cuando el jugador está más de 3 bloques por encima o por debajo de ti. Solo para jugadores cargados cerca: de los lejanos el juego no envía la altura.
+
 ## 0.10.5
 - La barra de aire usa el mismo grosor (3 px), ancho (120 px) y posición que la barra de salto de la montura, para que ambas se vean homogéneas (nunca se usan a la vez). El icono de burbuja queda a su izquierda.
 

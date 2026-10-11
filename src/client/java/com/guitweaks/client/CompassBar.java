@@ -25,14 +25,38 @@ import java.util.UUID;
 public final class CompassBar {
 	private static final int BAR_W = 170;          // ancho de la tira, 180 grados de visión
 	private static final int PAD = 5;
-	private static final int MARKER_H = 11;
+	private static final int MARKER_H = 19;      // cabeza (10 px) y 3 px de aire arriba y abajo para las flechitas
 	private static final int STRIP_H = 12;
 	private static final int INFO_H = 9;
 	private static final int TOP = 4;
 	private static final float TEXT_SCALE = 0.8f;
 	private static final String[] POINTS = {"N", "NE", "E", "SE", "S", "SO", "O", "NO"};
 
-	private record Marker(UUID id, float angle, double distance, int color) {}
+	/** @param dy diferencia de altura con el jugador local (NaN si no se conoce) */
+	private record Marker(UUID id, float angle, double distance, int color, double dy) {}
+
+	/** Zona de abajo que se respeta: ahí van la barra de salto, la de aire y la vida de la montura. */
+	private static final int RESERVED_BOTTOM = 66;
+	private static final double ARROW_MIN_DY = 3.0;
+
+	/** Posición vertical de la brújula según el porcentaje de caída elegido. */
+	private static int topFor(GuiGraphicsExtractor g, GuiTweaksConfig cfg, int h, float s) {
+		int free = Math.max(0, g.guiHeight() - TOP - Math.round(h * s) - RESERVED_BOTTOM);
+		return TOP + Math.round(free * cfg.compassDropPercent / 100f);
+	}
+
+	/** Flechita de 3 filas: hacia arriba o hacia abajo. {@code y} es su fila superior. */
+	private static void arrow(GuiGraphicsExtractor g, int x, int y, boolean up, int color) {
+		if (up) {
+			g.fill(x, y, x + 1, y + 1, color);
+			g.fill(x - 1, y + 1, x + 2, y + 2, color);
+			g.fill(x - 2, y + 2, x + 3, y + 3, color);
+		} else {
+			g.fill(x - 2, y, x + 3, y + 1, color);
+			g.fill(x - 1, y + 1, x + 2, y + 2, color);
+			g.fill(x, y + 2, x + 1, y + 3, color);
+		}
+	}
 
 	private CompassBar() {}
 
@@ -58,7 +82,7 @@ public final class CompassBar {
 		int h = PAD + (markers ? MARKER_H : 0) + (strip ? STRIP_H + (info ? 3 : 0) : 0) + (info ? INFO_H : 0) + PAD;
 		float s = Draw.fit(cfg.scalePercent / 100f, w, g.guiWidth());
 		int px = Math.round(g.guiWidth() / 2f - w * s / 2f);
-		int py = TOP + cfg.compassOffsetY;
+		int py = topFor(g, cfg, h, s);
 
 		g.pose().pushMatrix();
 		g.pose().translate(px, py);
@@ -100,7 +124,7 @@ public final class CompassBar {
 		int h = PAD + (dial ? dialSize + (info ? 2 : 0) : 0) + (info ? INFO_H : 0) + PAD;
 		float s = Draw.fit(cfg.scalePercent / 100f, w, g.guiWidth());
 		int px = Math.round(g.guiWidth() / 2f - w * s / 2f);
-		int py = TOP + cfg.compassOffsetY;
+		int py = topFor(g, cfg, h, s);
 
 		g.pose().pushMatrix();
 		g.pose().translate(px, py);
@@ -162,12 +186,17 @@ public final class CompassBar {
 					int alpha = Math.round(255 * near);
 					PlayerInfo pi = cfg.compassHeads && m.id() != null && mc.getConnection() != null
 						? mc.getConnection().getPlayerInfo(m.id()) : null;
+					if (cfg.compassHeads && pi == null) continue;
 					if (pi != null) {
-						g.fill(mx - 5, my - 5, mx + 5, my + 5, 0xFF000000);
-						PlayerFaceExtractor.extractRenderState(g, pi.getSkin(), mx - 4, my - 4, 8);
+						g.fill(mx - 5, my - 5, mx + 5, my + 5, Draw.withAlpha(0x000000, alpha));
+						PlayerFaceExtractor.extractRenderState(g, pi.getSkin(), mx - 4, my - 4, 8, (alpha << 24) | 0xFFFFFF);
 					} else {
 						g.fill(mx - 3, my - 3, mx + 3, my + 3, Draw.withAlpha(0x000000, alpha));
 						g.fill(mx - 2, my - 2, mx + 2, my + 2, Draw.withAlpha(m.color(), alpha));
+					}
+					if (!Double.isNaN(m.dy()) && Math.abs(m.dy()) > ARROW_MIN_DY) {
+						boolean up = m.dy() > 0;
+						arrow(g, mx, up ? my - 9 : my + 6, up, Draw.withAlpha(accent, alpha));
 					}
 				}
 			}
@@ -222,6 +251,7 @@ public final class CompassBar {
 		List<Marker> list = collect(mc, cfg, cam, partial, yaw);
 		list.sort(Comparator.comparingDouble(Marker::distance).reversed());   // los cercanos quedan encima
 		float ppd = BAR_W / 180f;
+		int accent = cfg.accentColor();
 		for (Marker m : list) {
 			boolean edge = Math.abs(m.angle()) > 90f;
 			float a = Math.max(-90f, Math.min(90f, m.angle()));
@@ -229,14 +259,22 @@ public final class CompassBar {
 			float near = 1f - 0.45f * (float) Math.min(1.0, m.distance() / cfg.compassRange);
 			int alpha = Math.round(255 * near * (edge ? 0.6f : 1f));
 
-			PlayerInfo info = !edge && cfg.compassHeads && m.id() != null && mc.getConnection() != null
+			PlayerInfo info = cfg.compassHeads && m.id() != null && mc.getConnection() != null
 				? mc.getConnection().getPlayerInfo(m.id()) : null;
+			if (cfg.compassHeads && info == null) continue;       // con "cabezas" no se dibujan puntos
+
+			int hy = y + 5;
 			if (info != null) {
-				g.fill(x - 5, y, x + 5, y + 10, 0xFF000000);
-				PlayerFaceExtractor.extractRenderState(g, info.getSkin(), x - 4, y + 1, 8);
+				g.fill(x - 5, hy - 1, x + 5, hy + 9, Draw.withAlpha(0x000000, alpha));
+				PlayerFaceExtractor.extractRenderState(g, info.getSkin(), x - 4, hy, 8, (alpha << 24) | 0xFFFFFF);
 			} else {
-				g.fill(x - 3, y + 2, x + 3, y + 8, Draw.withAlpha(0x000000, alpha));
-				g.fill(x - 2, y + 3, x + 2, y + 7, Draw.withAlpha(m.color(), alpha));
+				g.fill(x - 3, hy + 1, x + 3, hy + 7, Draw.withAlpha(0x000000, alpha));
+				g.fill(x - 2, hy + 2, x + 2, hy + 6, Draw.withAlpha(m.color(), alpha));
+			}
+			// Flechita si el jugador está bastante más arriba o más abajo que tú
+			if (!Double.isNaN(m.dy()) && Math.abs(m.dy()) > ARROW_MIN_DY) {
+				boolean up = m.dy() > 0;
+				arrow(g, x, up ? y : y + 16, up, Draw.withAlpha(accent, alpha));
 			}
 		}
 	}
@@ -260,7 +298,12 @@ public final class CompassBar {
 				if (id != null && id.equals(mc.player.getUUID())) return;
 				float angle = (float) wp.yawAngleToCamera(mc.level, camera, partialSupplier);
 				int color = wp.icon().color.orElseGet(() -> colorOf(id != null ? id.hashCode() : 0)) | 0xFF000000;
-				out.add(new Marker(id, angle, dist, color));
+				double dy = Double.NaN;
+				if (id != null) {
+					var pl = mc.level.getPlayerByUUID(id);
+					if (pl != null) dy = pl.getY() - cam.getY();
+				}
+				out.add(new Marker(id, angle, dist, color, dy));
 			});
 			found = !out.isEmpty();
 		}
@@ -273,7 +316,7 @@ public final class CompassBar {
 				if (dist > cfg.compassRange) continue;
 				// Dirección de Minecraft (0 = sur, 90 = oeste), relativa a hacia donde miras
 				float angle = Mth.wrapDegrees((float) (Mth.atan2(-dx, dz) * 180.0 / Math.PI) - yaw);
-				out.add(new Marker(p.getUUID(), angle, dist, colorOf(p.getUUID().hashCode())));
+				out.add(new Marker(p.getUUID(), angle, dist, colorOf(p.getUUID().hashCode()), p.getY() - cam.getY()));
 			}
 		}
 		return out;
