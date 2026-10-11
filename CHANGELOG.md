@@ -2,6 +2,9 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.11.1
+- Los puntitos de jugadores del localizador vanilla, que seguían saliendo justo sobre la barra de items, ya no se dibujan mientras las barras vanilla estén ocultas. Causa: el juego pinta la barra de información (XP, localizador o salto) en dos llamadas, y la de los puntos queda fuera de lo que Fabric permite ocultar. Ahora, mientras "Ocultar barras vanilla" está activo, el juego usa una barra vacía en lugar del localizador (se cambia por reflexión, sin Mixins) y la restaura al desactivarlo. La brújula del mod ocupa su lugar. Si el cambio no se pudiera aplicar, el mod lo avisa en el log sin afectar al resto.
+
 ## 0.11.0
 - Brújula: con "Cabezas de jugador" activado ya no se dibujan puntos de color, solo cabezas (las que quedan al borde de la vista se ven atenuadas). Con la opción desactivada se usan puntos.
 - Brújula: "Bajar brújula" ahora es un porcentaje (0 a 100 %) y llega casi hasta abajo, justo por encima de la zona de la barra de salto, la de aire y la vida de la montura. Sustituye al ajuste anterior en píxeles.
