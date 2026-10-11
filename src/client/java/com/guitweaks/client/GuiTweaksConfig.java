@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** Configuración guardada en config/guitweaks.json. */
 public class GuiTweaksConfig {
@@ -58,6 +60,9 @@ public class GuiTweaksConfig {
 	public boolean showDirection = true;
 
 	/** Botones de comandos rápidos que aparecen al abrir el chat. */
+	/** Desplazamiento (dx, dy) de cada panel respecto a su posición automática; lo cambia el editor. */
+	public Map<String, int[]> panelOffsets = new HashMap<>();
+
 	public boolean showQuickCommands = true;
 	/** Botón de configuración en la pantalla de pausa (Esc). */
 	public boolean showPauseButton = true;
@@ -130,6 +135,8 @@ public class GuiTweaksConfig {
 		compassPlayers = o.compassPlayers; compassHeads = o.compassHeads;
 		compassRange = o.compassRange; compassOffsetY = o.compassOffsetY; compassDropPercent = o.compassDropPercent;
 		showFps = o.showFps; showCoords = o.showCoords; showDirection = o.showDirection;
+		panelOffsets = new HashMap<>();
+		for (Map.Entry<String, int[]> e : o.panelOffsets.entrySet()) panelOffsets.put(e.getKey(), e.getValue().clone());
 		showQuickCommands = o.showQuickCommands; showPauseButton = o.showPauseButton; arrowTrail = o.arrowTrail; chatPanelCenter = o.chatPanelCenter; showItemPopup = o.showItemPopup;
 		popupSeconds = o.popupSeconds; showEffectsPanel = o.showEffectsPanel; equipmentMode = o.equipmentMode; hotbarStyle = o.hotbarStyle;
 		showMobHealth = o.showMobHealth; mobDistance = o.mobDistance;
@@ -187,6 +194,7 @@ public class GuiTweaksConfig {
 		instance.hotbarStyle = Math.max(0, Math.min(1, instance.hotbarStyle));
 		instance.popupSeconds = Math.max(1, Math.min(6, instance.popupSeconds));
 		if (instance.quickCommands == null) instance.quickCommands = defaultCommands();
+		if (instance.panelOffsets == null) instance.panelOffsets = new HashMap<>();
 		while (instance.quickCommands.size() > MAX_QUICK_COMMANDS) instance.quickCommands.remove(instance.quickCommands.size() - 1);
 		instance.save();
 	}

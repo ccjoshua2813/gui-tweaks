@@ -59,7 +59,10 @@ public final class EquipmentPanel {
 		}
 
 		g.pose().pushMatrix();
-		g.pose().translate(px, MARGIN);
+		px += PanelLayout.dx("equipment");
+		int py = MARGIN + PanelLayout.dy("equipment");
+		PanelLayout.record("equipment", px, py, Math.round(w * s), Math.round(h * s));
+		g.pose().translate(px, py);
 		g.pose().scale(s, s);
 		int y = (h - SMALL * ARMOR.length) / 2;
 		for (int i = 0; i < ARMOR.length; i++) {
@@ -79,8 +82,9 @@ public final class EquipmentPanel {
 		// Izquierda: sin ranura de mano izquierda (ya la dibuja el juego). Casco, pechera y flechas
 		// quedan apilados justo encima de esa ranura vanilla.
 		int rows = arrows > 0 ? 3 : 2;
-		int lx = hotbarLeft - 26;
-		int ly = g.guiHeight() - 24 - rows * ROW;
+		int lx = hotbarLeft - 26 + PanelLayout.dx("equip_left");
+		int ly = g.guiHeight() - 24 - rows * ROW + PanelLayout.dy("equip_left");
+		PanelLayout.record("equip_left", lx - 2, ly, ICON + 4, rows * ROW);
 		if (cfg.opacityPercent > 0) Draw.rounded(g, lx - 2, ly, ICON + 4, rows * ROW, tint);
 		icon(g, font, p.getItemBySlot(EquipmentSlot.HEAD), EMPTY_SLOT[0], lx, ly + 1, ICON);
 		icon(g, font, p.getItemBySlot(EquipmentSlot.CHEST), EMPTY_SLOT[1], lx, ly + ROW + 1, ICON);
@@ -88,7 +92,9 @@ public final class EquipmentPanel {
 
 		// Derecha: mano derecha, pantalón, botas y espacios libres
 		int rx = hotbarRight + 8 + (mc.options.attackIndicator().get() == net.minecraft.client.AttackIndicatorStatus.HOTBAR ? 24 : 0);
-		int ry = g.guiHeight() - 3 - 4 * ROW;
+		rx += PanelLayout.dx("equip_right");
+		int ry = g.guiHeight() - 3 - 4 * ROW + PanelLayout.dy("equip_right");
+		PanelLayout.record("equip_right", rx - 2, ry, ICON + 4, 4 * ROW);
 		if (cfg.opacityPercent > 0) Draw.rounded(g, rx - 2, ry, ICON + 4, 4 * ROW, tint);
 		ItemStack hand = p.getMainHandItem();
 		if (!hand.isEmpty()) {

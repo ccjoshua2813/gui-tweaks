@@ -89,6 +89,7 @@ public class GuiTweaksConfigScreen extends Screen {
 				items.add(toggle("mob_players", () -> onOff(c.mobPlayers), () -> c.mobPlayers = !c.mobPlayers));
 			}
 			default -> {
+				items.add(Button.builder(t("edit_layout"), b -> minecraft.setScreenAndShow(new HudEditorScreen(this))).size(COL_W, 20).build());
 				items.add(toggle("quick", () -> onOff(c.showQuickCommands), () -> c.showQuickCommands = !c.showQuickCommands));
 				items.add(toggle("chat_position", () -> t(c.chatPanelCenter ? "chat_position.center" : "chat_position.top"), () -> c.chatPanelCenter = !c.chatPanelCenter));
 				items.add(Button.builder(t("edit_commands"), b -> minecraft.setScreenAndShow(new QuickCommandsScreen(this))).size(COL_W, 20).build());

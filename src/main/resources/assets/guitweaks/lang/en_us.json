@@ -76,5 +76,18 @@
 	"guitweaks.config.head3d_height": "3D head height",
 	"guitweaks.config.info_style.2": "Round compass",
 	"guitweaks.config.arrow_trail": "Arrow trail (experimental)",
-	"guitweaks.config.reset_tab": "Reset this tab"
+	"guitweaks.config.reset_tab": "Reset this tab",
+	"guitweaks.config.edit_layout": "Edit panel positions...",
+	"guitweaks.layout.title": "Edit panels",
+	"guitweaks.layout.hint": "Drag a panel with the mouse. Arrow keys: fine tune (Shift: 5 px). Esc: exit",
+	"guitweaks.layout.empty": "Join a world to edit the panels",
+	"guitweaks.layout.done": "Done",
+	"guitweaks.layout.reset": "Reset positions",
+	"guitweaks.layout.panel.status": "Status panel",
+	"guitweaks.layout.panel.info": "Compass / info",
+	"guitweaks.layout.panel.effects": "Effects",
+	"guitweaks.layout.panel.equipment": "Armor",
+	"guitweaks.layout.panel.equip_left": "Equipment (left)",
+	"guitweaks.layout.panel.equip_right": "Equipment (right)",
+	"guitweaks.layout.panel.mob": "Mob health"
 }

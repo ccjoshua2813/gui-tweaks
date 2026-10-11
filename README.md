@@ -18,6 +18,7 @@ iconos flotan.
 - **Comandos rápidos** en el chat: una caja de botones que defines tú.
 - **Estela de flecha** (experimental): trayectoria de la flecha al apuntar con un arco o una ballesta cargada.
 - Barras de **salto de la montura** y de **aire** con el mismo estilo.
+- **Editor de paneles:** arrastra cada panel a donde quieras.
 - **Configuración** con pestañas desde Mod Menu o desde el botón "GUI Tweaks" de la pantalla de pausa (Esc).
 
 ## Requisitos

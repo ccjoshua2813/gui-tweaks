@@ -83,6 +83,9 @@ public final class CompassBar {
 		float s = Draw.fit(cfg.scalePercent / 100f, w, g.guiWidth());
 		int px = Math.round(g.guiWidth() / 2f - w * s / 2f);
 		int py = topFor(g, cfg, h, s);
+		px += PanelLayout.dx("info");
+		py += PanelLayout.dy("info");
+		PanelLayout.record("info", px, py, Math.round(w * s), Math.round(h * s));
 
 		g.pose().pushMatrix();
 		g.pose().translate(px, py);
@@ -125,6 +128,9 @@ public final class CompassBar {
 		float s = Draw.fit(cfg.scalePercent / 100f, w, g.guiWidth());
 		int px = Math.round(g.guiWidth() / 2f - w * s / 2f);
 		int py = topFor(g, cfg, h, s);
+		px += PanelLayout.dx("info");
+		py += PanelLayout.dy("info");
+		PanelLayout.record("info", px, py, Math.round(w * s), Math.round(h * s));
 
 		g.pose().pushMatrix();
 		g.pose().translate(px, py);

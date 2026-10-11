@@ -76,5 +76,18 @@
 	"guitweaks.config.head3d_height": "Altura cabeza 3D",
 	"guitweaks.config.info_style.2": "Brújula circular",
 	"guitweaks.config.arrow_trail": "Estela de flecha (experimental)",
-	"guitweaks.config.reset_tab": "Restablecer pestaña"
+	"guitweaks.config.reset_tab": "Restablecer pestaña",
+	"guitweaks.config.edit_layout": "Editar posición de paneles...",
+	"guitweaks.layout.title": "Editar paneles",
+	"guitweaks.layout.hint": "Arrastra un panel con el ratón. Flechas: ajuste fino (Mayús: 5 px). Esc: salir",
+	"guitweaks.layout.empty": "Entra a un mundo para editar los paneles",
+	"guitweaks.layout.done": "Listo",
+	"guitweaks.layout.reset": "Restablecer posiciones",
+	"guitweaks.layout.panel.status": "Panel de estado",
+	"guitweaks.layout.panel.info": "Brújula / info",
+	"guitweaks.layout.panel.effects": "Efectos",
+	"guitweaks.layout.panel.equipment": "Armadura",
+	"guitweaks.layout.panel.equip_left": "Equipo (izquierda)",
+	"guitweaks.layout.panel.equip_right": "Equipo (derecha)",
+	"guitweaks.layout.panel.mob": "Vida de mobs"
 }

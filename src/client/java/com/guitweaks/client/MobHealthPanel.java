@@ -35,6 +35,11 @@ public final class MobHealthPanel {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.player == null || mc.level == null || !cfg.showMobHealth) return;
 
+		if (PanelLayout.editing) {
+			drawCard(g, cfg, mc.font, "Cerdo", "10/10", 1f, 0xFF5CD65C, 0xFFFFFFFF, 255, 1f);   // muestra para colocarlo
+			return;
+		}
+
 		long now = System.currentTimeMillis();
 		LivingEntity found = find(mc, cfg);
 		if (found != null) {
@@ -65,6 +70,11 @@ public final class MobHealthPanel {
 		String hp = Math.round(Math.max(0f, target.getHealth())) + "/" + Math.round(max);
 		int nameColor = target instanceof Enemy ? 0xFFFF9A9A : target instanceof Player ? cfg.accentColor() : 0xFFFFFFFF;
 
+		drawCard(g, cfg, font, name, hp, frac, barColor, nameColor, alpha, fade);
+	}
+
+	private static void drawCard(GuiGraphicsExtractor g, GuiTweaksConfig cfg, Font font, String name, String hp, float frac,
+								 int barColor, int nameColor, int alpha, float fade) {
 		float nameW = font.width(name) * TEXT_SCALE;
 		float hpW = font.width(hp) * 0.7f;
 		int w = Math.round(Math.max(nameW, BAR_W + 4 + hpW)) + PAD * 2;
@@ -74,6 +84,9 @@ public final class MobHealthPanel {
 		int px = Math.round(g.guiWidth() / 2f - w * s / 2f);
 		int py = Math.round(g.guiHeight() / 2f + 16);
 
+		px += PanelLayout.dx("mob");
+		py += PanelLayout.dy("mob");
+		PanelLayout.record("mob", px, py, Math.round(w * s), Math.round(h * s));
 		g.pose().pushMatrix();
 		g.pose().translate(px, py);
 		g.pose().scale(s, s);

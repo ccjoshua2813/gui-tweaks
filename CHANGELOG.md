@@ -2,6 +2,10 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.12.0
+- Editor de paneles: Extras → "Editar posición de paneles..." (también desde el botón GUI Tweaks de la pausa). Los paneles se ven sobre el juego, con datos de muestra si hace falta (efectos, vida de mobs), y se arrastran con el ratón; las flechas afinan de 1 en 1 px (Mayús: 5 px). Atrae al centro de la pantalla, no deja sacar un panel del todo, y "Restablecer posiciones" devuelve todo a la colocación automática.
+- Se pueden mover: panel de estado, brújula/info, efectos, armadura (perfil de arriba), las dos columnas de equipo junto a la barra y la tarjeta de vida de mobs. Cada posición se guarda como desplazamiento sobre la colocación automática, así que sigue adaptándose al cambiar de pantalla o escala.
+
 ## 0.11.1
 - Los puntitos de jugadores del localizador vanilla, que seguían saliendo justo sobre la barra de items, ya no se dibujan mientras las barras vanilla estén ocultas. Causa: el juego pinta la barra de información (XP, localizador o salto) en dos llamadas, y la de los puntos queda fuera de lo que Fabric permite ocultar. Ahora, mientras "Ocultar barras vanilla" está activo, el juego usa una barra vacía en lugar del localizador (se cambia por reflexión, sin Mixins) y la restaura al desactivarlo. La brújula del mod ocupa su lugar. Si el cambio no se pudiera aplicar, el mod lo avisa en el log sin afectar al resto.
 

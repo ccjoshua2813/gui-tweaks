@@ -57,6 +57,9 @@ public final class InfoPanel {
 		float fullScale = cfg.scalePercent / 100f;
 		int px = cfg.isRight() ? Math.round(g.guiWidth() - MARGIN - w * s) : MARGIN;
 		int py = MARGIN + (statusShown ? Math.round((StatusPanel.height() + SPACING) * fullScale) : 0);
+		px += PanelLayout.dx("info");
+		py += PanelLayout.dy("info");
+		PanelLayout.record("info", px, py, Math.round(w * s), Math.round(h * s));
 
 		g.pose().pushMatrix();
 		g.pose().translate(px, py);

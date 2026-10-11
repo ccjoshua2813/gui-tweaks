@@ -69,10 +69,12 @@ public final class StatusPanel {
 		int h = height();
 
 		float s = Draw.fit(cfg.scalePercent / 100f, w, g.guiWidth());
-		int px = cfg.isRight() ? Math.round(g.guiWidth() - MARGIN - w * s) : MARGIN;
+		int px = (cfg.isRight() ? Math.round(g.guiWidth() - MARGIN - w * s) : MARGIN) + PanelLayout.dx("status");
+		int py = MARGIN + PanelLayout.dy("status");
+		PanelLayout.record("status", px, py, Math.round(w * s), Math.round(h * s));
 
 		g.pose().pushMatrix();
-		g.pose().translate(px, MARGIN);
+		g.pose().translate(px, py);
 		g.pose().scale(s, s);
 
 		Draw.card(g, 0, 0, w, h, accent, cfg.opacityPercent);
@@ -83,7 +85,7 @@ public final class StatusPanel {
 			int shake = cfg.headEffects ? HeadEffects.shake(p) : 0;
 			if (cfg.head3d) {
 				g.fill(x, y, x + HEAD, y + HEAD, 0xFF14161C);
-				Head3D.draw(g, p, Math.round(px + (x + shake) * s), Math.round(MARGIN + y * s), Math.round(HEAD * s), cfg);
+				Head3D.draw(g, p, Math.round(px + (x + shake) * s), Math.round(py + y * s), Math.round(HEAD * s), cfg);
 			} else {
 				PlayerFaceExtractor.extractRenderState(g, p.getSkin(), x + shake, y, HEAD);
 			}

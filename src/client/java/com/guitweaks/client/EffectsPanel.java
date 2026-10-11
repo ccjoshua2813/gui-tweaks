@@ -29,10 +29,16 @@ public final class EffectsPanel {
 	public static void render(GuiGraphicsExtractor g) {
 		GuiTweaksConfig cfg = GuiTweaksConfig.get();
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.player == null || !cfg.showEffectsPanel || mc.player.getActiveEffects().isEmpty()) return;
+		if (mc.player == null || !cfg.showEffectsPanel || (mc.player.getActiveEffects().isEmpty() && !PanelLayout.editing)) return;
 
 		Font font = mc.font;
 		List<MobEffectInstance> effects = new ArrayList<>(mc.player.getActiveEffects());
+		if (PanelLayout.editing && effects.isEmpty()) {
+			// Efectos de muestra para poder colocar el panel
+			effects.add(new MobEffectInstance(net.minecraft.world.effect.MobEffects.SPEED, 1200, 1));
+			effects.add(new MobEffectInstance(net.minecraft.world.effect.MobEffects.REGENERATION, 600));
+			effects.add(new MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 150));
+		}
 		effects.sort(Comparator.comparing((MobEffectInstance e) -> e.getEffect().value().isBeneficial()).reversed()
 			.thenComparingInt(e -> e.isInfiniteDuration() ? Integer.MAX_VALUE : e.getDuration()));
 
@@ -75,6 +81,9 @@ public final class EffectsPanel {
 		if (StatusPanel.isVisible(mc)) py += Math.round((StatusPanel.height() + SPACING) * s);
 		py += InfoPanel.occupiedHeight(cfg);
 
+		px += PanelLayout.dx("effects");
+		py += PanelLayout.dy("effects");
+		PanelLayout.record("effects", px, py, Math.round(w * s), Math.round(h * s));
 		g.pose().pushMatrix();
 		g.pose().translate(px, py);
 		g.pose().scale(s, s);
