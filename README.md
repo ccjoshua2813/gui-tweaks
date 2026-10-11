@@ -2,7 +2,7 @@
 
 > 🤖 **Proyecto desarrollado con asistencia de IA.** El diseño, la dirección y las pruebas son de
 > [ccjoshua2813](https://github.com/ccjoshua2813); el código se escribió con ayuda de **Claude** (IA de Anthropic).
-> Los commits llevan la línea `Co-Authored-By` correspondiente.
+> Los commits lo indican con la línea `Assisted-by`.
 
 Mod de **solo cliente** para Minecraft **26.2** (Fabric) que rediseña la interfaz con un estilo uniforme:
 mismo color de acento, misma opacidad y todo configurable. Con la opacidad en 0 los paneles desaparecen y los
@@ -45,7 +45,7 @@ duplicados. Desactiva uno de los dos.
 
 ## Transparencia sobre el uso de IA
 
-Diseño, dirección y pruebas: ccjoshua2813. El código se escribió con ayuda de Claude (IA de Anthropic), que figura como coautor en los commits. Se indica aquí y en cada release para ser transparentes sobre cómo se hizo.
+Diseño, dirección y pruebas: ccjoshua2813. El código se escribió con ayuda de Claude (IA de Anthropic), que se indica con la línea `Assisted-by` en los commits. Se indica aquí y en cada release para ser transparentes sobre cómo se hizo.
 
 ## Licencia
 
