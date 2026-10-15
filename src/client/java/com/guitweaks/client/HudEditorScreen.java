@@ -9,7 +9,10 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Editor de posición de los paneles: los paneles se ven detrás con datos de muestra y se arrastran con el
@@ -21,12 +24,25 @@ public class HudEditorScreen extends Screen {
 	private static final int GRID = 6;           // la cuadrícula guía divide la pantalla en 6x6
 
 	private final Screen parent;
+	/** Posiciones al abrir el editor: "Deshacer cambios" vuelve a ellas (y no toca nada más del mod). */
+	private final Map<String, int[]> original = new HashMap<>();
+	private Button undoButton, defaultsButton;
 	private String dragging, selected;
 	private double accX, accY;
 
 	public HudEditorScreen(Screen parent) {
 		super(Component.translatable("guitweaks.layout.title"));
 		this.parent = parent;
+		for (Map.Entry<String, int[]> e : GuiTweaksConfig.get().panelOffsets.entrySet()) original.put(e.getKey(), e.getValue().clone());
+	}
+
+	private boolean changed() {
+		Map<String, int[]> now = GuiTweaksConfig.get().panelOffsets;
+		if (now.size() != original.size()) return true;
+		for (Map.Entry<String, int[]> e : original.entrySet()) {
+			if (!Arrays.equals(e.getValue(), now.get(e.getKey()))) return true;
+		}
+		return false;
 	}
 
 	private static Component t(String key) {
@@ -36,17 +52,34 @@ public class HudEditorScreen extends Screen {
 	@Override
 	protected void init() {
 		PanelLayout.editing = true;
-		addRenderableWidget(Button.builder(t("done"), b -> onClose()).bounds(width / 2 - 125, height - 28, 120, 20).build());
-		addRenderableWidget(Button.builder(t("reset"), b -> askReset()).bounds(width / 2 + 5, height - 28, 120, 20).build());
+		int bw = 120, gap = 4, bx = width / 2 - (bw * 3 + gap * 2) / 2;
+		addRenderableWidget(Button.builder(t("done"), b -> onClose()).bounds(bx, height - 28, bw, 20).build());
+		undoButton = addRenderableWidget(Button.builder(t("reset"), b -> askUndo()).bounds(bx + bw + gap, height - 28, bw, 20).build());
+		defaultsButton = addRenderableWidget(Button.builder(t("defaults"), b -> askDefaults()).bounds(bx + (bw + gap) * 2, height - 28, bw, 20).build());
 	}
 
-	/** Pide confirmación antes de borrar las posiciones; si no hay ninguna guardada, no hay nada que borrar. */
-	private void askReset() {
+	/** Pide confirmación antes de devolver todos los paneles a su colocación automática (se puede deshacer). */
+	private void askDefaults() {
 		if (GuiTweaksConfig.get().panelOffsets.isEmpty()) return;
 		minecraft.setScreenAndShow(new ConfirmScreen(yes -> {
 			if (yes) {
 				GuiTweaksConfig.get().panelOffsets.clear();
 				GuiTweaksConfig.get().save();
+				selected = null;
+			}
+			minecraft.setScreenAndShow(this);
+		}, t("defaults.title"), t("defaults.message")));
+	}
+
+	/** Pide confirmación antes de volver a las posiciones con las que se abrió el editor. */
+	private void askUndo() {
+		if (!changed()) return;
+		minecraft.setScreenAndShow(new ConfirmScreen(yes -> {
+			if (yes) {
+				GuiTweaksConfig cfg = GuiTweaksConfig.get();
+				cfg.panelOffsets = new HashMap<>();
+				for (Map.Entry<String, int[]> e : original.entrySet()) cfg.panelOffsets.put(e.getKey(), e.getValue().clone());
+				cfg.save();
 				selected = null;
 			}
 			minecraft.setScreenAndShow(this);
@@ -60,6 +93,8 @@ public class HudEditorScreen extends Screen {
 
 	@Override
 	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
+		if (undoButton != null) undoButton.active = changed();     // nada que deshacer = botón apagado
+		if (defaultsButton != null) defaultsButton.active = !GuiTweaksConfig.get().panelOffsets.isEmpty();
 		super.extractRenderState(g, mouseX, mouseY, delta);
 		int accent = GuiTweaksConfig.get().accentColor();
 

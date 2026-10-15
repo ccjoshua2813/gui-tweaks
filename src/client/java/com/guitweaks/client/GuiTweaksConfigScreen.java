@@ -1,9 +1,11 @@
 package com.guitweaks.client;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -107,17 +109,27 @@ public class GuiTweaksConfigScreen extends Screen {
 			addRenderableWidget(w);
 		}
 
-		int bw = 112, gap = 4;
-		int bx = width / 2 - (bw * 3 + gap * 2) / 2;
+		// El reinicio de todo el mod vive solo en Extras (que tiene sitio libre); la advertencia va en el botón y debajo
+		if (currentTab == 2) {
+			int warnY = 148;
+			addRenderableWidget(Button.builder(t("reset").copy().withStyle(ChatFormatting.RED), b ->
+				minecraft.setScreenAndShow(new ConfirmScreen(yes -> {
+					if (yes) {
+						c.copyFrom(new GuiTweaksConfig());
+						c.save();
+					}
+					minecraft.setScreenAndShow(this);
+				}, t("reset.title").copy().withStyle(ChatFormatting.RED), t("reset.message"))))
+				.bounds(width / 2 - COL_W - 5, warnY + 20, COL_W * 2 + 10, 20).build());
+		}
+
+		int bw = 112, bw2 = 170, gap = 4;
+		int bx = width / 2 - (bw + bw2 + gap) / 2;
 		addRenderableWidget(Button.builder(t("done"), b -> onClose()).bounds(bx, height - 28, bw, 20).build());
 		addRenderableWidget(Button.builder(t("reset_tab"), b -> {
 			c.resetTab(currentTab);
 			rebuildWidgets();
-		}).bounds(bx + bw + gap, height - 28, bw, 20).build());
-		addRenderableWidget(Button.builder(t("reset"), b -> {
-			c.copyFrom(new GuiTweaksConfig());
-			rebuildWidgets();
-		}).bounds(bx + (bw + gap) * 2, height - 28, bw, 20).build());
+		}).bounds(bx + bw + gap, height - 28, bw2, 20).build());
 	}
 
 	private static Button toggle(String key, Supplier<Component> value, Runnable action) {
@@ -139,6 +151,10 @@ public class GuiTweaksConfigScreen extends Screen {
 	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		super.extractRenderState(g, mouseX, mouseY, delta);
 		g.centeredText(font, title, width / 2, 12, 0xFFFFFFFF);
+		if (currentTab == 2) {      // explicación bajo el botón de reinicio total
+			g.centeredText(font, t("reset.warn1"), width / 2, 192, 0xFFB8B8B8);
+			g.centeredText(font, t("reset.warn2"), width / 2, 202, 0xFFB8B8B8);
+		}
 	}
 
 	@Override

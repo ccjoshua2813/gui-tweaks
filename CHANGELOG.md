@@ -2,6 +2,11 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.13.1
+- Correcciones sobre la 0.13.0, sin funciones nuevas.
+- Editor de paneles: ahora hay dos botones. "Deshacer cambios" devuelve los paneles a la posición que tenían al abrir el editor (queda apagado si no hay nada que deshacer). "Posiciones por defecto" los devuelve a la colocación automática sin tocar el resto del mod, y se puede deshacer mientras el editor siga abierto. Los dos piden confirmación.
+- "Restablecer todo" (que sí borraba toda la configuración del mod) sale de la barra inferior, que aparece en todas las pestañas, y pasa a la pestaña Extras, con la advertencia en rojo dentro del propio botón, una explicación debajo y una confirmación. La barra inferior queda con "Listo" y "Pestaña: valores por defecto" (antes "Restablecer pestaña"), que solo devuelve a su valor de fábrica los ajustes de la pestaña abierta.
+
 ## 0.13.0
 - Editor de paneles: un panel ya no puede pisar a otro. Si el movimiento chocaría, avanza hasta donde pueda y se desliza a lo largo del obstáculo. Un panel que ya estaba pisando a otro (de una configuración anterior) puede moverse mientras no pise más.
 - Editor de paneles: zona reservada abajo, marcada en rojo, que ningún panel puede ocupar: la barra de items y, justo encima, las barras de aire, salto y vida de la montura.
