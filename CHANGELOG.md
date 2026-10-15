@@ -2,6 +2,12 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.13.0
+- Editor de paneles: un panel ya no puede pisar a otro. Si el movimiento chocaría, avanza hasta donde pueda y se desliza a lo largo del obstáculo. Un panel que ya estaba pisando a otro (de una configuración anterior) puede moverse mientras no pise más.
+- Editor de paneles: zona reservada abajo, marcada en rojo, que ningún panel puede ocupar: la barra de items y, justo encima, las barras de aire, salto y vida de la montura.
+- Editor de paneles: cuadrícula guía 6x6 sobre la pantalla (las líneas del centro, más marcadas).
+- "Restablecer posiciones" ahora pide confirmación antes de borrar, y no hace nada si no hay posiciones guardadas.
+
 ## 0.12.0
 - Editor de paneles: Extras → "Editar posición de paneles..." (también desde el botón GUI Tweaks de la pausa). Los paneles se ven sobre el juego, con datos de muestra si hace falta (efectos, vida de mobs), y se arrastran con el ratón; las flechas afinan de 1 en 1 px (Mayús: 5 px). Atrae al centro de la pantalla, no deja sacar un panel del todo, y "Restablecer posiciones" devuelve todo a la colocación automática.
 - Se pueden mover: panel de estado, brújula/info, efectos, armadura (perfil de arriba), las dos columnas de equipo junto a la barra y la tarjeta de vida de mobs. Cada posición se guarda como desplazamiento sobre la colocación automática, así que sigue adaptándose al cambiar de pantalla o escala.

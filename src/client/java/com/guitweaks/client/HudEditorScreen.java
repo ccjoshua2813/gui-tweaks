@@ -2,6 +2,7 @@ package com.guitweaks.client;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -17,6 +18,7 @@ import java.util.List;
 public class HudEditorScreen extends Screen {
 	private static final int EDGE_KEEP = 12;     // lo mínimo que debe quedar a la vista de un panel
 	private static final int SNAP = 3;           // atracción al centro de la pantalla
+	private static final int GRID = 6;           // la cuadrícula guía divide la pantalla en 6x6
 
 	private final Screen parent;
 	private String dragging, selected;
@@ -35,10 +37,20 @@ public class HudEditorScreen extends Screen {
 	protected void init() {
 		PanelLayout.editing = true;
 		addRenderableWidget(Button.builder(t("done"), b -> onClose()).bounds(width / 2 - 125, height - 28, 120, 20).build());
-		addRenderableWidget(Button.builder(t("reset"), b -> {
-			GuiTweaksConfig.get().panelOffsets.clear();
-			selected = null;
-		}).bounds(width / 2 + 5, height - 28, 120, 20).build());
+		addRenderableWidget(Button.builder(t("reset"), b -> askReset()).bounds(width / 2 + 5, height - 28, 120, 20).build());
+	}
+
+	/** Pide confirmación antes de borrar las posiciones; si no hay ninguna guardada, no hay nada que borrar. */
+	private void askReset() {
+		if (GuiTweaksConfig.get().panelOffsets.isEmpty()) return;
+		minecraft.setScreenAndShow(new ConfirmScreen(yes -> {
+			if (yes) {
+				GuiTweaksConfig.get().panelOffsets.clear();
+				GuiTweaksConfig.get().save();
+				selected = null;
+			}
+			minecraft.setScreenAndShow(this);
+		}, t("reset.title"), t("reset.message")));
 	}
 
 	@Override
@@ -53,6 +65,22 @@ public class HudEditorScreen extends Screen {
 
 		g.centeredText(font, title, width / 2, 8, 0xFFFFFFFF);
 		g.centeredText(font, t(minecraft.player == null ? "empty" : "hint"), width / 2, 20, 0xFFC8C8C8);
+
+		// Cuadrícula guía 6x6 (las líneas del centro, algo más marcadas)
+		for (int i = 1; i < GRID; i++) {
+			int gx = width * i / GRID, gy = height * i / GRID;
+			int c = i == GRID / 2 ? 0x55FFFFFF : 0x26FFFFFF;
+			g.fill(gx, 0, gx + 1, height, c);
+			g.fill(0, gy, width, gy + 1, c);
+		}
+
+		// Zona reservada: barra de items y barras de aire, salto y montura
+		int[] z = PanelLayout.reservedZone(width, height);
+		g.fill(z[0], z[1], z[0] + z[2], z[1] + z[3], 0x30FF4040);
+		g.fill(z[0], z[1], z[0] + z[2], z[1] + 1, 0x90FF4040);
+		g.fill(z[0], z[1], z[0] + 1, z[1] + z[3], 0x90FF4040);
+		g.fill(z[0] + z[2] - 1, z[1], z[0] + z[2], z[1] + z[3], 0x90FF4040);
+		g.centeredText(font, t("zone"), width / 2, z[1] - 10, 0xFFFF9090);
 
 		for (PanelLayout.Rect r : PanelLayout.recent()) {
 			boolean sel = r.id().equals(selected);
@@ -126,20 +154,59 @@ public class HudEditorScreen extends Screen {
 		return super.keyPressed(event);
 	}
 
-	/** Mueve un panel, sin sacarlo de la pantalla y con atracción al centro si se arrastra con el ratón. */
+	private static long overlap(int ax, int ay, int aw, int ah, int bx, int by, int bw, int bh) {
+		int ox = Math.min(ax + aw, bx + bw) - Math.max(ax, bx);
+		int oy = Math.min(ay + ah, by + bh) - Math.max(ay, by);
+		return ox > 0 && oy > 0 ? (long) ox * oy : 0;
+	}
+
+	/** Área que un panel en (x, y) pisaría de los otros paneles y de la zona reservada. */
+	private long overlapArea(String id, int x, int y, int w, int h) {
+		int[] z = PanelLayout.reservedZone(width, height);
+		long total = overlap(x, y, w, h, z[0], z[1], z[2], z[3]);
+		for (PanelLayout.Rect o : PanelLayout.recent()) {
+			if (!o.id().equals(id)) total += overlap(x, y, w, h, o.x(), o.y(), o.w(), o.h());
+		}
+		return total;
+	}
+
+	/**
+	 * Mueve un panel sin sacarlo de la pantalla y sin que pise a otro panel ni la zona reservada. Si el
+	 * movimiento chocaría, avanza lo que se pueda (primero en horizontal y luego en vertical, así se desliza
+	 * a lo largo del obstáculo). Un panel que ya estaba pisando algo puede moverse mientras no pise más.
+	 */
 	private void move(String id, int ix, int iy, boolean snap) {
 		PanelLayout.Rect r = PanelLayout.get(id);
 		if (r == null) return;
+		int w = r.w(), h = r.h();
 		// No dejar que salga del todo de la pantalla
-		int nx = Math.max(EDGE_KEEP - r.w(), Math.min(width - EDGE_KEEP, r.x() + ix));
-		int ny = Math.max(EDGE_KEEP - r.h(), Math.min(height - EDGE_KEEP, r.y() + iy));
+		int nx = Math.max(EDGE_KEEP - w, Math.min(width - EDGE_KEEP, r.x() + ix));
+		int ny = Math.max(EDGE_KEEP - h, Math.min(height - EDGE_KEEP, r.y() + iy));
 		ix = nx - r.x();
 		iy = ny - r.y();
-		if (snap) {
-			int centerDiff = width / 2 - (nx + r.w() / 2);
-			if (Math.abs(centerDiff) <= SNAP) ix += centerDiff;
+
+		long cur = overlapArea(id, r.x(), r.y(), w, h);
+		int fx = 0;
+		for (int k = ix; k != 0; k -= Integer.signum(k)) {
+			long a = overlapArea(id, r.x() + k, r.y(), w, h);
+			if (a == 0 || a <= cur) { fx = k; break; }
 		}
-		PanelLayout.setOffset(id, PanelLayout.dx(id) + ix, PanelLayout.dy(id) + iy);
+		long afterX = overlapArea(id, r.x() + fx, r.y(), w, h);
+		int fy = 0;
+		for (int k = iy; k != 0; k -= Integer.signum(k)) {
+			long a = overlapArea(id, r.x() + fx, r.y() + k, w, h);
+			if (a == 0 || a <= afterX) { fy = k; break; }
+		}
+		if (snap) {
+			int centerDiff = width / 2 - (r.x() + fx + w / 2);
+			if (centerDiff != 0 && Math.abs(centerDiff) <= SNAP) {
+				long base = overlapArea(id, r.x() + fx, r.y() + fy, w, h);
+				long a = overlapArea(id, r.x() + fx + centerDiff, r.y() + fy, w, h);
+				if (a == 0 || a <= base) fx += centerDiff;
+			}
+		}
+		if (fx == 0 && fy == 0) return;
+		PanelLayout.setOffset(id, PanelLayout.dx(id) + fx, PanelLayout.dy(id) + fy);
 	}
 
 	@Override

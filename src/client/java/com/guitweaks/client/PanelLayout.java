@@ -36,6 +36,14 @@ public final class PanelLayout {
 		else cfg.panelOffsets.put(id, new int[] {dx, dy});
 	}
 
+	/**
+	 * Zona que ningún panel puede ocupar: la barra de items (182x22) y, justo encima, las barras de aire,
+	 * salto y vida de la montura (hasta dos filas de corazones). Devuelve {x, y, ancho, alto}.
+	 */
+	public static int[] reservedZone(int screenW, int screenH) {
+		return new int[] {screenW / 2 - 91, screenH - 50, 182, 50};
+	}
+
 	/** Anota el rectángulo (en píxeles de pantalla) que ocupa un panel en este fotograma. */
 	public static void record(String id, int x, int y, int w, int h) {
 		RECTS.put(id, new Rect(id, x, y, w, h, System.currentTimeMillis()));
