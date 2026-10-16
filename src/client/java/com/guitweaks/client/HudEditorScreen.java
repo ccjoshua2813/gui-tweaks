@@ -26,7 +26,7 @@ public class HudEditorScreen extends Screen {
 	private final Screen parent;
 	/** Posiciones al abrir el editor: "Deshacer cambios" vuelve a ellas (y no toca nada más del mod). */
 	private final Map<String, int[]> original = new HashMap<>();
-	private Button undoButton, defaultsButton;
+	private Button undoButton;
 	private String dragging, selected;
 	private double accX, accY;
 
@@ -52,23 +52,10 @@ public class HudEditorScreen extends Screen {
 	@Override
 	protected void init() {
 		PanelLayout.editing = true;
-		int bw = 120, gap = 4, bx = width / 2 - (bw * 3 + gap * 2) / 2;
-		addRenderableWidget(Button.builder(t("done"), b -> onClose()).bounds(bx, height - 28, bw, 20).build());
-		undoButton = addRenderableWidget(Button.builder(t("reset"), b -> askUndo()).bounds(bx + bw + gap, height - 28, bw, 20).build());
-		defaultsButton = addRenderableWidget(Button.builder(t("defaults"), b -> askDefaults()).bounds(bx + (bw + gap) * 2, height - 28, bw, 20).build());
-	}
-
-	/** Pide confirmación antes de devolver todos los paneles a su colocación automática (se puede deshacer). */
-	private void askDefaults() {
-		if (GuiTweaksConfig.get().panelOffsets.isEmpty()) return;
-		minecraft.setScreenAndShow(new ConfirmScreen(yes -> {
-			if (yes) {
-				GuiTweaksConfig.get().panelOffsets.clear();
-				GuiTweaksConfig.get().save();
-				selected = null;
-			}
-			minecraft.setScreenAndShow(this);
-		}, t("defaults.title"), t("defaults.message")));
+		// Los dos botones caben dentro de la zona reservada (182 px de ancho), para no tapar ningún panel
+		int[] z = PanelLayout.reservedZone(width, height);
+		addRenderableWidget(Button.builder(t("done"), b -> onClose()).bounds(z[0], height - 28, 60, 20).build());
+		undoButton = addRenderableWidget(Button.builder(t("reset"), b -> askUndo()).bounds(z[0] + 62, height - 28, 120, 20).build());
 	}
 
 	/** Pide confirmación antes de volver a las posiciones con las que se abrió el editor. */
@@ -89,17 +76,18 @@ public class HudEditorScreen extends Screen {
 	@Override
 	public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		g.fill(0, 0, width, height, 0x40000000);          // se ve el HUD detrás, apenas oscurecido
+		drawOverlay(g);                                    // todo lo demás va en el fondo: los botones quedan encima
 	}
 
 	@Override
 	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		if (undoButton != null) undoButton.active = changed();     // nada que deshacer = botón apagado
-		if (defaultsButton != null) defaultsButton.active = !GuiTweaksConfig.get().panelOffsets.isEmpty();
 		super.extractRenderState(g, mouseX, mouseY, delta);
-		int accent = GuiTweaksConfig.get().accentColor();
+	}
 
-		g.centeredText(font, title, width / 2, 8, 0xFFFFFFFF);
-		g.centeredText(font, t(minecraft.player == null ? "empty" : "hint"), width / 2, 20, 0xFFC8C8C8);
+	/** Cuadrícula guía, zona reservada, paneles y ayuda. */
+	private void drawOverlay(GuiGraphicsExtractor g) {
+		int accent = GuiTweaksConfig.get().accentColor();
 
 		// Cuadrícula guía 6x6 (las líneas del centro, algo más marcadas)
 		for (int i = 1; i < GRID; i++) {
@@ -115,7 +103,9 @@ public class HudEditorScreen extends Screen {
 		g.fill(z[0], z[1], z[0] + z[2], z[1] + 1, 0x90FF4040);
 		g.fill(z[0], z[1], z[0] + 1, z[1] + z[3], 0x90FF4040);
 		g.fill(z[0] + z[2] - 1, z[1], z[0] + z[2], z[1] + z[3], 0x90FF4040);
-		g.centeredText(font, t("zone"), width / 2, z[1] - 10, 0xFFFF9090);
+		// Ayuda y nombre de la zona, dentro de la zona (encima de los botones), para no pisar ningún panel
+		g.centeredText(font, t(minecraft.player == null ? "empty" : "hint"), width / 2, z[1] + 3, 0xFFC8C8C8);
+		g.centeredText(font, t("zone"), width / 2, z[1] + 13, 0xFFFF9090);
 
 		for (PanelLayout.Rect r : PanelLayout.recent()) {
 			boolean sel = r.id().equals(selected);

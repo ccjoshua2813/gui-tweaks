@@ -19,15 +19,16 @@ iconos flotan.
 - **Barra de items** con el estilo del mod (opcional), con la animación de recoger items y el indicador de ataque.
 - **Aviso al cambiar de item:** nombre, encantamientos y una barrita de durabilidad.
 - **Vida de mobs** al apuntarles, con distancia y filtros (hostiles, no hostiles, jugadores).
-- **Comandos rápidos** en el chat: una caja de botones que defines tú.
+- **Comandos rápidos** en el chat: una caja de botones que defines tú, en hasta 3 grupos con nombre (por ejemplo, uno por servidor) entre los que alternas con un botón.
 - **Estela de flecha** (experimental): trayectoria de la flecha al apuntar con un arco o una ballesta cargada.
 - Barras de **salto de la montura** y de **aire** con el mismo estilo.
-- **Editor de paneles:** arrastra cada panel a donde quieras.
+- **Editor de paneles:** arrastra cada panel a donde quieras, con cuadrícula guía, sin que se pisen entre sí y sin invadir la zona de la barra de items.
+- **Vistas guardadas:** seis ranuras con el nombre que quieras para guardar y cambiar entre distintas configuraciones de apariencia y posiciones.
 - **Configuración** con pestañas desde Mod Menu o desde el botón "GUI Tweaks" de la pantalla de pausa (Esc).
 
 ## Requisitos
 
-- Minecraft 26.2, Fabric Loader 0.19.5 o superior, Java 25.
+- Minecraft 26.2 o 26.3, Fabric Loader 0.19.5 o superior, Java 25.
 - [Fabric API](https://modrinth.com/mod/fabric-api) (obligatorio).
 - [Mod Menu](https://modrinth.com/mod/modmenu) (opcional).
 

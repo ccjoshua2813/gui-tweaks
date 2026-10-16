@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
@@ -117,7 +116,7 @@ public final class EquipmentPanel {
 		g.pose().translate(x, y);
 		g.pose().scale(sc, sc);
 		if (stack.isEmpty()) {
-			g.blitSprite(RenderPipelines.GUI_TEXTURED, emptySprite, 0, 0, ICON, ICON, 0x66FFFFFF);
+			Sprites.blitTinted(g, emptySprite, 0, 0, ICON, ICON, 0x66FFFFFF);
 		} else {
 			g.item(stack, 0, 0);
 			g.itemDecorations(font, stack, 0, 0);

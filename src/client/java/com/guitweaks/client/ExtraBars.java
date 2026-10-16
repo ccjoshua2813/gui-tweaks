@@ -3,7 +3,6 @@ package com.guitweaks.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.LivingEntity;
@@ -74,9 +73,9 @@ public final class ExtraBars {
 			for (int i = 0; i < inRow; i++) {
 				int idx = r * perRow + i;
 				int ix = i * 8;
-				g.blitSprite(RenderPipelines.GUI_TEXTURED, MOUNT_EMPTY, ix, 0, 9, 9);
-				if (idx * 2 + 1 < hp) g.blitSprite(RenderPipelines.GUI_TEXTURED, MOUNT_FULL, ix, 0, 9, 9);
-				else if (idx * 2 + 1 == hp) g.blitSprite(RenderPipelines.GUI_TEXTURED, MOUNT_HALF, ix, 0, 9, 9);
+				Sprites.blit(g, MOUNT_EMPTY, ix, 0, 9, 9);
+				if (idx * 2 + 1 < hp) Sprites.blit(g, MOUNT_FULL, ix, 0, 9, 9);
+				else if (idx * 2 + 1 == hp) Sprites.blit(g, MOUNT_HALF, ix, 0, 9, 9);
 			}
 			g.pose().popMatrix();
 		}
@@ -101,7 +100,7 @@ public final class ExtraBars {
 		int color = low ? 0xFFE53935 : Draw.lerp(0xFF4FC3F7, 0xFF8FE3FF, frac);
 		if (low && (System.currentTimeMillis() / 250) % 2 == 0) color = 0xFFFF8A80;
 
-		g.blitSprite(RenderPipelines.GUI_TEXTURED, AIR, x - 12, y - 3, 9, 9);
+		Sprites.blit(g, AIR, x - 12, y - 3, 9, 9);
 		Draw.pill(g, x - 1, y - 1, w + 2, h + 2, 0xFF000000);
 		Draw.pill(g, x, y, w, h, 0xFF23252B);
 		if (frac > 0f) {

@@ -15,11 +15,15 @@ import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-/** Pantalla de configuración abierta desde Mod Menu, con pestañas. */
+/**
+ * Pantalla de configuración abierta desde Mod Menu, con pestañas por tema:
+ * Estado (panel de vida/hambre), Brújula (info), Barra (items, equipo, efectos, aviso), Mobs y General.
+ */
 public class GuiTweaksConfigScreen extends Screen {
 	private static final int COL_W = 150;
 	private static final int ROW = 22;
-	private static final int TABS = 4;
+	private static final int TABS = 5;
+	private static final int GENERAL = 4;
 	private static int currentTab = 0;
 
 	private final Screen parent;
@@ -40,9 +44,10 @@ public class GuiTweaksConfigScreen extends Screen {
 	@Override
 	protected void init() {
 		GuiTweaksConfig c = GuiTweaksConfig.get();
+		if (currentTab >= TABS) currentTab = 0;
 
 		// Pestañas
-		int tabW = 88;
+		int tabW = 76;
 		for (int i = 0; i < TABS; i++) {
 			final int tab = i;
 			Button b = Button.builder(t("tab." + i), x -> { currentTab = tab; rebuildWidgets(); })
@@ -54,7 +59,7 @@ public class GuiTweaksConfigScreen extends Screen {
 		// Contenido de la pestaña: dos columnas, de izquierda a derecha y hacia abajo
 		List<AbstractWidget> items = new ArrayList<>();
 		switch (currentTab) {
-			case 0 -> {
+			case 0 -> {    // Estado: panel de vida, hambre y armadura
 				items.add(toggle("side", () -> t(c.isRight() ? "side.right" : "side.left"), () -> c.side = c.isRight() ? "LEFT" : "RIGHT"));
 				items.add(toggle("head", () -> onOff(c.showHead), () -> c.showHead = !c.showHead));
 				items.add(toggle("head3d", () -> onOff(c.head3d), () -> c.head3d = !c.head3d));
@@ -62,14 +67,9 @@ public class GuiTweaksConfigScreen extends Screen {
 				items.add(slider("head3d_height", -30, 30, 2, "", () -> c.head3dHeight, v -> c.head3dHeight = v));
 				items.add(toggle("head_effects", () -> onOff(c.headEffects), () -> c.headEffects = !c.headEffects));
 				items.add(toggle("numbers", () -> onOff(c.showNumbers), () -> c.showNumbers = !c.showNumbers));
-				items.add(toggle("accent", () -> t("accent." + GuiTweaksConfig.ACCENT_KEYS[c.accent % GuiTweaksConfig.ACCENTS.length]),
-					() -> c.accent = (c.accent + 1) % GuiTweaksConfig.ACCENTS.length));
-				items.add(toggle("hide_vanilla", () -> onOff(c.hideVanillaBars), () -> c.hideVanillaBars = !c.hideVanillaBars));
-				items.add(slider("scale", 50, 150, 5, "%", () -> c.scalePercent, v -> c.scalePercent = v));
-				items.add(slider("opacity", 0, 100, 5, "%", () -> c.opacityPercent, v -> c.opacityPercent = v));
 				items.add(slider("bar_width", 60, 140, 5, " px", () -> c.barWidth, v -> c.barWidth = v));
 			}
-			case 1 -> {
+			case 1 -> {    // Brújula e info
 				items.add(toggle("info", () -> onOff(c.showInfoPanel), () -> c.showInfoPanel = !c.showInfoPanel));
 				items.add(toggle("info_style", () -> t("info_style." + c.infoStyle), () -> c.infoStyle = (c.infoStyle + 1) % 3));
 				items.add(toggle("fps", () -> onOff(c.showFps), () -> c.showFps = !c.showFps));
@@ -79,26 +79,34 @@ public class GuiTweaksConfigScreen extends Screen {
 				items.add(toggle("compass_heads", () -> onOff(c.compassHeads), () -> c.compassHeads = !c.compassHeads));
 				items.add(slider("compass_range", 50, 1000, 50, " m", () -> c.compassRange, v -> c.compassRange = v));
 				items.add(slider("compass_offset", 0, 100, 5, " %", () -> c.compassDropPercent, v -> c.compassDropPercent = v));
-				items.add(toggle("effects", () -> onOff(c.showEffectsPanel), () -> c.showEffectsPanel = !c.showEffectsPanel));
+			}
+			case 2 -> {    // Barra de items, equipo, efectos y aviso del item
+				items.add(toggle("hide_vanilla", () -> onOff(c.hideVanillaBars), () -> c.hideVanillaBars = !c.hideVanillaBars));
 				items.add(toggle("hotbar", () -> t("hotbar." + c.hotbarStyle), () -> c.hotbarStyle = (c.hotbarStyle + 1) % 2));
 				items.add(toggle("equipment", () -> t("equipment." + c.equipmentMode), () -> c.equipmentMode = (c.equipmentMode + 1) % 3));
+				items.add(toggle("effects", () -> onOff(c.showEffectsPanel), () -> c.showEffectsPanel = !c.showEffectsPanel));
+				items.add(toggle("item_popup", () -> onOff(c.showItemPopup), () -> c.showItemPopup = !c.showItemPopup));
+				items.add(slider("popup_seconds", 1, 6, 1, " s", () -> c.popupSeconds, v -> c.popupSeconds = v));
 			}
-			case 3 -> {
+			case 3 -> {    // Mobs
 				items.add(toggle("mob_health", () -> onOff(c.showMobHealth), () -> c.showMobHealth = !c.showMobHealth));
 				items.add(slider("mob_distance", 4, 64, 2, " m", () -> c.mobDistance, v -> c.mobDistance = v));
 				items.add(toggle("mob_hostile", () -> onOff(c.mobHostile), () -> c.mobHostile = !c.mobHostile));
 				items.add(toggle("mob_passive", () -> onOff(c.mobPassive), () -> c.mobPassive = !c.mobPassive));
 				items.add(toggle("mob_players", () -> onOff(c.mobPlayers), () -> c.mobPlayers = !c.mobPlayers));
 			}
-			default -> {
+			default -> {   // General: apariencia de todo, editor de paneles, comandos del chat, vistas guardadas
+				items.add(toggle("accent", () -> t("accent." + GuiTweaksConfig.ACCENT_KEYS[c.accent % GuiTweaksConfig.ACCENTS.length]),
+					() -> c.accent = (c.accent + 1) % GuiTweaksConfig.ACCENTS.length));
+				items.add(slider("scale", 50, 150, 5, "%", () -> c.scalePercent, v -> c.scalePercent = v));
+				items.add(slider("opacity", 0, 100, 5, "%", () -> c.opacityPercent, v -> c.opacityPercent = v));
+				items.add(toggle("pause_button", () -> onOff(c.showPauseButton), () -> c.showPauseButton = !c.showPauseButton));
+				items.add(toggle("arrow_trail", () -> onOff(c.arrowTrail), () -> c.arrowTrail = !c.arrowTrail));
 				items.add(Button.builder(t("edit_layout"), b -> minecraft.setScreenAndShow(new HudEditorScreen(this))).size(COL_W, 20).build());
 				items.add(toggle("quick", () -> onOff(c.showQuickCommands), () -> c.showQuickCommands = !c.showQuickCommands));
 				items.add(toggle("chat_position", () -> t(c.chatPanelCenter ? "chat_position.center" : "chat_position.top"), () -> c.chatPanelCenter = !c.chatPanelCenter));
 				items.add(Button.builder(t("edit_commands"), b -> minecraft.setScreenAndShow(new QuickCommandsScreen(this))).size(COL_W, 20).build());
-				items.add(toggle("arrow_trail", () -> onOff(c.arrowTrail), () -> c.arrowTrail = !c.arrowTrail));
-				items.add(toggle("pause_button", () -> onOff(c.showPauseButton), () -> c.showPauseButton = !c.showPauseButton));
-				items.add(toggle("item_popup", () -> onOff(c.showItemPopup), () -> c.showItemPopup = !c.showItemPopup));
-				items.add(slider("popup_seconds", 1, 6, 1, " s", () -> c.popupSeconds, v -> c.popupSeconds = v));
+				items.add(Button.builder(t("view_slots"), b -> minecraft.setScreenAndShow(new ViewSlotsScreen(this))).size(COL_W, 20).build());
 			}
 		}
 		int left = width / 2 - COL_W - 5, right = width / 2 + 5;
@@ -109,18 +117,19 @@ public class GuiTweaksConfigScreen extends Screen {
 			addRenderableWidget(w);
 		}
 
-		// El reinicio de todo el mod vive solo en Extras (que tiene sitio libre); la advertencia va en el botón y debajo
-		if (currentTab == 2) {
-			int warnY = 148;
+		// El reinicio de todo el mod vive solo en General (que tiene sitio libre); la advertencia va en el botón y debajo
+		if (currentTab == GENERAL) {
 			addRenderableWidget(Button.builder(t("reset").copy().withStyle(ChatFormatting.RED), b ->
 				minecraft.setScreenAndShow(new ConfirmScreen(yes -> {
 					if (yes) {
-						c.copyFrom(new GuiTweaksConfig());
+						c.copyFrom(GuiTweaksConfig.defaults());
+						GuiTweaksConfig.previousView = null;
+						GuiTweaksConfig.previousSlot = -1;
 						c.save();
 					}
 					minecraft.setScreenAndShow(this);
 				}, t("reset.title").copy().withStyle(ChatFormatting.RED), t("reset.message"))))
-				.bounds(width / 2 - COL_W - 5, warnY + 20, COL_W * 2 + 10, 20).build());
+				.bounds(width / 2 - COL_W - 5, 60 + 5 * ROW + 8, COL_W * 2 + 10, 20).build());
 		}
 
 		int bw = 112, bw2 = 170, gap = 4;
@@ -151,9 +160,10 @@ public class GuiTweaksConfigScreen extends Screen {
 	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		super.extractRenderState(g, mouseX, mouseY, delta);
 		g.centeredText(font, title, width / 2, 12, 0xFFFFFFFF);
-		if (currentTab == 2) {      // explicación bajo el botón de reinicio total
-			g.centeredText(font, t("reset.warn1"), width / 2, 192, 0xFFB8B8B8);
-			g.centeredText(font, t("reset.warn2"), width / 2, 202, 0xFFB8B8B8);
+		if (currentTab == GENERAL) {      // explicación bajo el botón de reinicio total
+			int y = 60 + 5 * ROW + 8 + 24;
+			g.centeredText(font, t("reset.warn1"), width / 2, y, 0xFFB8B8B8);
+			g.centeredText(font, t("reset.warn2"), width / 2, y + 10, 0xFFB8B8B8);
 		}
 	}
 

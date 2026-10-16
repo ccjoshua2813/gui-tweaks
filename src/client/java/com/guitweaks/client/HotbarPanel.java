@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
@@ -47,9 +46,9 @@ public final class HotbarPanel {
 		boolean right = p.getMainArm() == HumanoidArm.RIGHT;
 		int x = right ? x0 + WIDTH + 6 : x0 - 24;
 		int y = y0 + 2;
-		g.blitSprite(RenderPipelines.GUI_TEXTURED, ATTACK_BG, x, y, 18, 18);
+		Sprites.blit(g, ATTACK_BG, x, y, 18, 18);
 		int h = (int) (f * 19f);
-		g.blitSprite(RenderPipelines.GUI_TEXTURED, ATTACK_PROGRESS, 18, 18, 0, 18 - h, x, y + 18 - h, 18, h);
+		Sprites.blitPart(g, ATTACK_PROGRESS, 18, 18, 0, 18 - h, x, y + 18 - h, 18, h);
 	}
 
 	/** ¿Debe dibujarse esta barra en vez de la vanilla? */

@@ -3,7 +3,6 @@ package com.guitweaks.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 
@@ -98,7 +97,7 @@ public final class EffectsPanel {
 				int a = c.blink ? 120 + (int) (135 * (0.5 + 0.5 * Math.sin(t / 150))) : 255;
 				Draw.pill(g, x, y, c.width, CHIP_H, Draw.withAlpha(border, a));
 				Draw.pill(g, x + 1, y + 1, c.width - 2, CHIP_H - 2, 0xFF1B1D23);
-				g.blitSprite(RenderPipelines.GUI_TEXTURED, c.icon, x + 3, y + (CHIP_H - ICON) / 2, ICON, ICON);
+				Sprites.blit(g, c.icon, x + 3, y + (CHIP_H - ICON) / 2, ICON, ICON);
 				g.pose().pushMatrix();
 				g.pose().translate(x + 3 + ICON + 2, y + 4);
 				g.pose().scale(TEXT_SCALE, TEXT_SCALE);

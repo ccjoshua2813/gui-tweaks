@@ -2,6 +2,17 @@
 
 Esquema: 0.1, 0.2, 0.3... hasta que sea estable; entonces será 1.0.
 
+## 0.14.0
+- Vistas guardadas: seis ranuras (General → "Vistas guardadas...") con nombre que elige el jugador. Cada ranura guarda la vista completa: ajustes de apariencia, posiciones de los paneles, opacidad, escala, acento, etc. Se puede cargar, guardar, duplicar (a la primera ranura libre) y borrar, y todo lo que sobrescribe o borra pide confirmación.
+- Al cargar una ranura con cambios sin guardar en la vista actual, avisa antes de perderlos; "Deshacer carga" devuelve la vista anterior mientras no se cierre el juego. La pantalla indica qué vista está activa y si tiene cambios sin guardar.
+- Tecla "Siguiente vista guardada" (Opciones → Controles → GUI Tweaks; sin asignar por defecto) para pasar a la siguiente ranura ocupada sin abrir menús.
+- Grupos de comandos rápidos: hasta 3 grupos con nombre (por ejemplo, uno por servidor), con pestañas en "Editar comandos...". En el chat, un botón largo sobre los botones rápidos alterna entre grupos (solo aparece si hay más de uno). Los comandos ya no forman parte de las vistas guardadas. Al actualizar desde una versión anterior, tus comandos pasan al primer grupo ("Principal").
+- Pantalla de ajustes reorganizada por temas en cinco pestañas: Estado (panel de vida y hambre), Brújula (info, FPS, coordenadas), Barra (barra de items, equipo, efectos, aviso del item), Mobs y General (acento, escala, opacidad, botón de la pausa, estela de flecha, editor de paneles, comandos del chat y vistas guardadas, y el reinicio total). "Pestaña: valores por defecto" restablece solo la pestaña abierta.
+- Editor de paneles: vuelve a un solo botón, "Deshacer cambios". El botón "Listo", "Deshacer cambios", la ayuda y el rótulo de la zona reservada caben ahora dentro de la zona reservada, así que ya no tapan paneles ni se pisan con sus rótulos; los botones se dibujan por encima de la cuadrícula y de la zona.
+- "Restablecer TODO el mod" (pestaña General) también borra los grupos de comandos y las vistas guardadas, y su aviso lo dice.
+- Compatible con Minecraft 26.2 y 26.3 (el mismo jar sirve en las dos). En la 26.3 Mojang cambió el tipo de tecla y el paquete de la clase de dibujo de sprites; los iconos de vida, hambre, armadura, aire, montura y equipo se dibujan ahora buscando esa clase al primer uso, y si no se encuentra solo faltan los iconos y se avisa en el log, sin cerrar el juego.
+- Valores de fábrica más compactos para una mejor primera impresión: panel de estado a la izquierda, escala 65 %, barras de 65 px y equipo junto a la barra de items. Solo afecta a instalaciones nuevas y a "restablecer"; la configuración guardada no cambia.
+
 ## 0.13.1
 - Correcciones sobre la 0.13.0, sin funciones nuevas.
 - Editor de paneles: ahora hay dos botones. "Deshacer cambios" devuelve los paneles a la posición que tenían al abrir el editor (queda apagado si no hay nada que deshacer). "Posiciones por defecto" los devuelve a la colocación automática sin tocar el resto del mod, y se puede deshacer mientras el editor siga abierto. Los dos piden confirmación.

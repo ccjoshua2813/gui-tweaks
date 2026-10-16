@@ -5,7 +5,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlayerFaceExtractor;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffects;
 
@@ -114,7 +113,7 @@ public final class StatusPanel {
 		int layers = Math.max(1, (int) Math.ceil(hp / 20f - 1e-4));
 		float layerFraction = layers == 1 ? Math.min(hp, 20f) / 20f : (hp - 20f * (layers - 1)) / 20f;
 		int hy = y;
-		g.blitSprite(RenderPipelines.GUI_TEXTURED, HEART, iconX, hy - 1, ICON, ICON);
+		Sprites.blit(g, HEART, iconX, hy - 1, ICON, ICON);
 		// Bajo la capa actual se ve, atenuada, la capa anterior
 		pillBar(g, barX, hy, barW, BAR_H, layerFraction, healthColor, layers > 1 ? Draw.shade(healthColor, 0.55f) : EMPTY);
 		if (layers > 1) {
@@ -131,14 +130,14 @@ public final class StatusPanel {
 		// Comida
 		int fy = y + PITCH;
 		int food = p.getFoodData().getFoodLevel();
-		g.blitSprite(RenderPipelines.GUI_TEXTURED, FOOD, iconX, fy - 1, ICON, ICON);
+		Sprites.blit(g, FOOD, iconX, fy - 1, ICON, ICON);
 		pillBar(g, barX, fy, barW, BAR_H, food / 20f, p.hasEffect(MobEffects.HUNGER) ? FOOD_HUNGER : FOOD_COLOR, EMPTY);
 		if (cfg.showNumbers) g.text(font, String.valueOf(food), numX, fy, 0xFFE6E6E6);
 
 		// Armadura
 		int ay = y + PITCH * 2;
 		int armor = p.getArmorValue();
-		g.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR, iconX, ay - 1, ICON, ICON);
+		Sprites.blit(g, ARMOR, iconX, ay - 1, ICON, ICON);
 		pillBar(g, barX, ay, barW, BAR_H, armor / 20f, ARMOR_COLOR, EMPTY);
 		if (cfg.showNumbers) g.text(font, String.valueOf(armor), numX, ay, 0xFFE6E6E6);
 
